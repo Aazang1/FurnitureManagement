@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FurnitureManagement.Server", "..\FurnitureManagement.Server\FurnitureManagement.Server.csproj", "{84A01647-6A72-4662-8DA4-4AE8AB3E02F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FurnitureManagement.Client", "..\FurnitureManagement.Client\FurnitureManagement.Client.csproj", "{CDA573C7-F4C3-4912-B1D4-24C3AE014993}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84A01647-6A72-4662-8DA4-4AE8AB3E02F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84A01647-6A72-4662-8DA4-4AE8AB3E02F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84A01647-6A72-4662-8DA4-4AE8AB3E02F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84A01647-6A72-4662-8DA4-4AE8AB3E02F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDA573C7-F4C3-4912-B1D4-24C3AE014993}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDA573C7-F4C3-4912-B1D4-24C3AE014993}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDA573C7-F4C3-4912-B1D4-24C3AE014993}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDA573C7-F4C3-4912-B1D4-24C3AE014993}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3FDB28FF-E028-4AD8-BD39-2A68EE5CB06C}
+	EndGlobalSection
+EndGlobal
