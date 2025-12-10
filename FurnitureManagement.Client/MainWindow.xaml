@@ -159,6 +159,21 @@
                     </Button.Style>
                 </Button>
                 
+                <!-- 分类管理 -->
+                <Button x:Name="btnCategoryManage" Content="分类管理" FontSize="14" Padding="20,15" Margin="0,0,0,0" HorizontalAlignment="Stretch"
+                        Background="#34495E" Foreground="White" BorderBrush="Transparent" BorderThickness="0,0,2,0"
+                        Click="btnCategoryManage_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#1A252F"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
                 <!-- 供应商管理 -->
                 <Button x:Name="btnSupplierManage" Content="供应商管理" FontSize="14" Padding="20,15" Margin="0,0,0,0" HorizontalAlignment="Stretch"
                         Background="#34495E" Foreground="White" BorderBrush="Transparent" BorderThickness="0,0,2,0"
@@ -313,6 +328,9 @@
             
             <!-- 商品管理内容区域 -->
             <Frame x:Name="ProductManageFrame" Visibility="Collapsed" NavigationUIVisibility="Hidden"/>
+            
+            <!-- 分类管理内容区域 -->
+            <Frame x:Name="CategoryManageFrame" Visibility="Collapsed" NavigationUIVisibility="Hidden"/>
             
             <!-- 供应商管理内容区域 -->
             <Frame x:Name="SupplierManageFrame" Visibility="Collapsed" NavigationUIVisibility="Hidden"/>

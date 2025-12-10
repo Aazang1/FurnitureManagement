@@ -79,6 +79,7 @@ namespace FurnitureManagement.Client
             btnFinanceManage.Background = defaultBackground;
             btnReportManage.Background = defaultBackground;
             btnProductManage.Background = defaultBackground;
+            btnCategoryManage.Background = defaultBackground;
             btnSupplierManage.Background = defaultBackground;
             btnWarehouseManage.Background = defaultBackground;
             btnUserManage.Background = defaultBackground;
@@ -217,6 +218,21 @@ namespace FurnitureManagement.Client
             ProductManageFrame.Visibility = Visibility.Visible;
         }
 
+        // 分类管理按钮点击事件
+        private void btnCategoryManage_Click(object sender, RoutedEventArgs e)
+        {
+            // 重置所有导航按钮样式
+            ResetNavButtonStyles();
+            // 设置当前按钮为激活状态
+            SetActiveNavButton(btnCategoryManage);
+            
+            // 隐藏所有内容页面
+            HideAllContentGrids();
+            // 显示分类管理页面
+            CategoryManageFrame.Navigate(new CategoryManagementPage());
+            CategoryManageFrame.Visibility = Visibility.Visible;
+        }
+
         // 供应商管理按钮点击事件
         private void btnSupplierManage_Click(object sender, RoutedEventArgs e)
         {
@@ -257,6 +273,7 @@ namespace FurnitureManagement.Client
             FinanceManageGrid.Visibility = Visibility.Collapsed;
             ReportManageGrid.Visibility = Visibility.Collapsed;
             ProductManageFrame.Visibility = Visibility.Collapsed;
+            CategoryManageFrame.Visibility = Visibility.Collapsed;
             SupplierManageFrame.Visibility = Visibility.Collapsed;
             WarehouseManageFrame.Visibility = Visibility.Collapsed;
             UserManageGrid.Visibility = Visibility.Collapsed;
