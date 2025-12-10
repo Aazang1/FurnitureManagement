@@ -108,6 +108,16 @@ namespace FurnitureManagement.Client
             var result = MessageBox.Show("确定要退出登录吗？", "确认", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
+                // 清除登录信息，防止自动登录
+                using (var store = System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForAssembly())
+                {
+                    string loginInfoFile = "logininfo.txt";
+                    if (store.FileExists(loginInfoFile))
+                    {
+                        store.DeleteFile(loginInfoFile);
+                    }
+                }
+                
                 // 关闭当前窗口，打开登录窗口
                 var loginWindow = new LoginWindow();
                 loginWindow.Show();
