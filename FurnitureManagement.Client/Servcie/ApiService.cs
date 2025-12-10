@@ -82,7 +82,14 @@ namespace FurnitureManagement.Client.Servcie
             try
             {
                 var response = await _httpClient.PutAsJsonAsync($"User/{id}", user);
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "更新成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"更新失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -97,7 +104,14 @@ namespace FurnitureManagement.Client.Servcie
             try
             {
                 var response = await _httpClient.DeleteAsync($"User/{id}");
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "删除成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"删除失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -112,7 +126,14 @@ namespace FurnitureManagement.Client.Servcie
             try
             {
                 var response = await _httpClient.PatchAsync($"User/{id}/activate", null);
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "激活成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"激活失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -127,7 +148,14 @@ namespace FurnitureManagement.Client.Servcie
             try
             {
                 var response = await _httpClient.PatchAsync($"User/{id}/deactivate", null);
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "禁用成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"禁用失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -135,9 +163,9 @@ namespace FurnitureManagement.Client.Servcie
                 return new ApiResponse { Success = false, Message = "网络请求失败" };
             }
         }
-        
+
         #region Category 商品分类相关接口
-        
+
         // 获取所有商品分类
         public async Task<List<Category>?> GetCategoriesAsync()
         {
@@ -152,7 +180,7 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 根据ID获取商品分类
         public async Task<Category?> GetCategoryByIdAsync(int id)
         {
@@ -167,7 +195,7 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 创建商品分类
         public async Task<Category?> CreateCategoryAsync(Category category)
         {
@@ -182,14 +210,21 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 更新商品分类
         public async Task<ApiResponse?> UpdateCategoryAsync(int id, Category category)
         {
             try
             {
                 var response = await _httpClient.PutAsJsonAsync($"Category/{id}", category);
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "更新成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"更新失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -197,14 +232,21 @@ namespace FurnitureManagement.Client.Servcie
                 return new ApiResponse { Success = false, Message = "网络请求失败" };
             }
         }
-        
+
         // 删除商品分类
         public async Task<ApiResponse?> DeleteCategoryAsync(int id)
         {
             try
             {
                 var response = await _httpClient.DeleteAsync($"Category/{id}");
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "删除成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"删除失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -212,11 +254,11 @@ namespace FurnitureManagement.Client.Servcie
                 return new ApiResponse { Success = false, Message = "网络请求失败" };
             }
         }
-        
+
         #endregion
-        
+
         #region Furniture 商品相关接口
-        
+
         // 获取所有商品
         public async Task<List<Furniture>?> GetFurnitureAsync()
         {
@@ -231,7 +273,7 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 根据ID获取商品
         public async Task<Furniture?> GetFurnitureByIdAsync(int id)
         {
@@ -246,7 +288,7 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 创建商品
         public async Task<Furniture?> CreateFurnitureAsync(Furniture furniture)
         {
@@ -261,14 +303,21 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 更新商品
         public async Task<ApiResponse?> UpdateFurnitureAsync(int id, Furniture furniture)
         {
             try
             {
                 var response = await _httpClient.PutAsJsonAsync($"Furniture/{id}", furniture);
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "更新成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"更新失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -276,14 +325,34 @@ namespace FurnitureManagement.Client.Servcie
                 return new ApiResponse { Success = false, Message = "网络请求失败" };
             }
         }
-        
+
         // 删除商品
         public async Task<ApiResponse?> DeleteFurnitureAsync(int id)
         {
             try
             {
                 var response = await _httpClient.DeleteAsync($"Furniture/{id}");
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "删除成功" };
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    // 尝试解析服务器返回的错误消息
+                    try
+                    {
+                        var errorResponse = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                        return errorResponse ?? new ApiResponse { Success = false, Message = "删除失败" };
+                    }
+                    catch
+                    {
+                        return new ApiResponse { Success = false, Message = "删除失败，请先删除相关数据" };
+                    }
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"删除失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -291,11 +360,11 @@ namespace FurnitureManagement.Client.Servcie
                 return new ApiResponse { Success = false, Message = "网络请求失败" };
             }
         }
-        
+
         #endregion
-        
+
         #region Inventory 库存相关接口
-        
+
         // 获取所有库存
         public async Task<List<Inventory>?> GetInventoryAsync()
         {
@@ -310,7 +379,7 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 根据ID获取库存
         public async Task<Inventory?> GetInventoryByIdAsync(int id)
         {
@@ -325,7 +394,7 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 根据商品ID获取库存
         public async Task<List<Inventory>?> GetInventoryByFurnitureIdAsync(int furnitureId)
         {
@@ -340,7 +409,7 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 根据仓库ID获取库存
         public async Task<List<Inventory>?> GetInventoryByWarehouseIdAsync(int warehouseId)
         {
@@ -355,7 +424,7 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 创建库存
         public async Task<Inventory?> CreateInventoryAsync(Inventory inventory)
         {
@@ -370,14 +439,21 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 更新库存
         public async Task<ApiResponse?> UpdateInventoryAsync(int id, Inventory inventory)
         {
             try
             {
                 var response = await _httpClient.PutAsJsonAsync($"Inventory/{id}", inventory);
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "更新成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"更新失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -385,14 +461,21 @@ namespace FurnitureManagement.Client.Servcie
                 return new ApiResponse { Success = false, Message = "网络请求失败" };
             }
         }
-        
+
         // 更新库存数量
         public async Task<ApiResponse?> UpdateInventoryQuantityAsync(int id, int quantity)
         {
             try
             {
                 var response = await _httpClient.PatchAsJsonAsync($"Inventory/{id}/update-quantity", quantity);
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "更新成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"更新失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -400,14 +483,21 @@ namespace FurnitureManagement.Client.Servcie
                 return new ApiResponse { Success = false, Message = "网络请求失败" };
             }
         }
-        
+
         // 删除库存
         public async Task<ApiResponse?> DeleteInventoryAsync(int id)
         {
             try
             {
                 var response = await _httpClient.DeleteAsync($"Inventory/{id}");
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "删除成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"删除失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -415,11 +505,11 @@ namespace FurnitureManagement.Client.Servcie
                 return new ApiResponse { Success = false, Message = "网络请求失败" };
             }
         }
-        
+
         #endregion
-        
+
         #region Supplier 供应商相关接口
-        
+
         // 获取所有供应商
         public async Task<List<Supplier>?> GetSuppliersAsync()
         {
@@ -434,7 +524,7 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 根据ID获取供应商
         public async Task<Supplier?> GetSupplierByIdAsync(int id)
         {
@@ -449,7 +539,7 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 创建供应商
         public async Task<Supplier?> CreateSupplierAsync(Supplier supplier)
         {
@@ -464,14 +554,21 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 更新供应商
         public async Task<ApiResponse?> UpdateSupplierAsync(int id, Supplier supplier)
         {
             try
             {
                 var response = await _httpClient.PutAsJsonAsync($"Supplier/{id}", supplier);
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "更新成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"更新失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -479,14 +576,21 @@ namespace FurnitureManagement.Client.Servcie
                 return new ApiResponse { Success = false, Message = "网络请求失败" };
             }
         }
-        
+
         // 删除供应商
         public async Task<ApiResponse?> DeleteSupplierAsync(int id)
         {
             try
             {
                 var response = await _httpClient.DeleteAsync($"Supplier/{id}");
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "删除成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"删除失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -494,11 +598,11 @@ namespace FurnitureManagement.Client.Servcie
                 return new ApiResponse { Success = false, Message = "网络请求失败" };
             }
         }
-        
+
         #endregion
-        
+
         #region Warehouse 仓库相关接口
-        
+
         // 获取所有仓库
         public async Task<List<Warehouse>?> GetWarehousesAsync()
         {
@@ -513,7 +617,7 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 根据ID获取仓库
         public async Task<Warehouse?> GetWarehouseByIdAsync(int id)
         {
@@ -528,7 +632,7 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 创建仓库
         public async Task<Warehouse?> CreateWarehouseAsync(Warehouse warehouse)
         {
@@ -543,14 +647,21 @@ namespace FurnitureManagement.Client.Servcie
                 return null;
             }
         }
-        
+
         // 更新仓库
         public async Task<ApiResponse?> UpdateWarehouseAsync(int id, Warehouse warehouse)
         {
             try
             {
                 var response = await _httpClient.PutAsJsonAsync($"Warehouse/{id}", warehouse);
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "更新成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"更新失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {
@@ -558,14 +669,21 @@ namespace FurnitureManagement.Client.Servcie
                 return new ApiResponse { Success = false, Message = "网络请求失败" };
             }
         }
-        
+
         // 删除仓库
         public async Task<ApiResponse?> DeleteWarehouseAsync(int id)
         {
             try
             {
                 var response = await _httpClient.DeleteAsync($"Warehouse/{id}");
-                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "删除成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"删除失败: {response.StatusCode}" };
+                }
             }
             catch (Exception ex)
             {

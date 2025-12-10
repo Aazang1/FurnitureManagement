@@ -13,11 +13,13 @@ namespace FurnitureManagement.Client.Views
         private readonly ApiService _apiService;
         private List<Furniture>? _allProducts;
         private List<Category>? _allCategories;
+        private readonly int? _currentUserId;
 
-        public ProductManagementPage()
+        public ProductManagementPage(int? currentUserId = null)
         {
             InitializeComponent();
             _apiService = new ApiService();
+            _currentUserId = currentUserId;
             LoadDataAsync();
         }
 
@@ -76,14 +78,13 @@ namespace FurnitureManagement.Client.Views
         // 添加商品按钮点击事件
         private void btnAddProduct_Click(object sender, RoutedEventArgs e)
         {
-            // 打开商品编辑窗口（新建商品）
-            var editWindow = new ProductEditWindow(null, _allCategories);
-            editWindow.Closed += (s, args) =>
+            // 打开商品编辑窗口（新建商品），传入当前用户ID
+            var editWindow = new ProductEditWindow(null, _allCategories, _currentUserId);
+            if (editWindow.ShowDialog() == true)
             {
                 // 窗口关闭后重新加载数据
                 LoadDataAsync();
-            };
-            editWindow.ShowDialog();
+            }
         }
 
         // 编辑商品按钮点击事件
@@ -94,13 +95,12 @@ namespace FurnitureManagement.Client.Views
             if (product != null)
             {
                 // 打开商品编辑窗口（编辑现有商品）
-                var editWindow = new ProductEditWindow(product, _allCategories);
-                editWindow.Closed += (s, args) =>
+                var editWindow = new ProductEditWindow(product, _allCategories, _currentUserId);
+                if (editWindow.ShowDialog() == true)
                 {
                     // 窗口关闭后重新加载数据
                     LoadDataAsync();
-                };
-                editWindow.ShowDialog();
+                }
             }
         }
 

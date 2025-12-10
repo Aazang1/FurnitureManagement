@@ -16,28 +16,28 @@ namespace FurnitureManagement.Client.Models
         public string WarehouseName { get; set; } = string.Empty;
         
         /// <summary>
-        /// 仓库地址
+        /// 位置
         /// </summary>
-        public string Address { get; set; } = string.Empty;
+        public string? Location { get; set; }
         
         /// <summary>
-        /// 联系人
+        /// 容量
         /// </summary>
-        public string ContactPerson { get; set; } = string.Empty;
+        public int? Capacity { get; set; }
         
         /// <summary>
-        /// 联系电话
+        /// 管理员
         /// </summary>
-        public string Phone { get; set; } = string.Empty;
+        public string? Manager { get; set; }
+        
+        /// <summary>
+        /// 创建人ID
+        /// </summary>
+        public int? CreatedBy { get; set; }
         
         /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        
-        /// <summary>
-        /// 更新时间
-        /// </summary>
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }
 }

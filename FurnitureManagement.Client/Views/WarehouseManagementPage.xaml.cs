@@ -1,4 +1,8 @@
-using System;using System.Collections.Generic;using System.Linq;using System.Text;using System.Threading.Tasks;using System.Windows;using System.Windows.Controls;using System.Windows.Data;using System.Windows.Documents;using System.Windows.Input;using System.Windows.Media;using System.Windows.Media.Imaging;using System.Windows.Navigation;using System.Windows.Shapes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using FurnitureManagement.Client.Servcie;
 using FurnitureManagement.Client.Models;
 
@@ -37,8 +41,8 @@ namespace FurnitureManagement.Client.Views
 
         private void btnAddWarehouse_Click(object sender, RoutedEventArgs e)
         {
-            // 添加仓库逻辑
-            var editWindow = new WarehouseEditWindow();
+            // 添加仓库逻辑 - 传入null表示新建
+            var editWindow = new WarehouseEditWindow(null);
             if (editWindow.ShowDialog() == true)
             {
                 // 刷新仓库列表
@@ -48,12 +52,12 @@ namespace FurnitureManagement.Client.Views
 
         private void btnEditWarehouse_Click(object sender, RoutedEventArgs e)
         {
-            // 编辑仓库逻辑
+            // 编辑仓库逻辑 - 传入选中的仓库
             var button = sender as Button;
             var warehouse = button?.Tag as Warehouse;
             if (warehouse != null)
             {
-                var editWindow = new WarehouseEditWindow();
+                var editWindow = new WarehouseEditWindow(warehouse);
                 if (editWindow.ShowDialog() == true)
                 {
                     // 刷新仓库列表
@@ -74,9 +78,16 @@ namespace FurnitureManagement.Client.Views
                 {
                     try
                     {
-                        await _apiService.DeleteWarehouseAsync(warehouse.WarehouseId);
-                        MessageBox.Show("仓库删除成功！", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LoadWarehousesAsync();
+                        var response = await _apiService.DeleteWarehouseAsync(warehouse.WarehouseId);
+                        if (response != null && response.Success)
+                        {
+                            MessageBox.Show("仓库删除成功！", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                            LoadWarehousesAsync();
+                        }
+                        else
+                        {
+                            MessageBox.Show(response?.Message ?? "删除失败", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
                     catch (Exception ex)
                     {

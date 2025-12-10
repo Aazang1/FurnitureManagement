@@ -39,10 +39,10 @@
                         </TextBox>
                     </StackPanel>
                     
-                    <!-- 地址 -->
+                    <!-- 位置 -->
                     <StackPanel Margin="0,0,0,15">
-                        <TextBlock Text="地址 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
-                        <TextBox x:Name="txtAddress" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
+                        <TextBlock Text="位置" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBox x:Name="txtLocation" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="BorderBrush" Value="#E0E0E0"/>
@@ -60,10 +60,10 @@
                         </TextBox>
                     </StackPanel>
                     
-                    <!-- 联系人 -->
+                    <!-- 容量 -->
                     <StackPanel Margin="0,0,0,15">
-                        <TextBlock Text="联系人 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
-                        <TextBox x:Name="txtContactPerson" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
+                        <TextBlock Text="容量" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBox x:Name="txtCapacity" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="BorderBrush" Value="#E0E0E0"/>
@@ -81,10 +81,10 @@
                         </TextBox>
                     </StackPanel>
                     
-                    <!-- 电话 -->
+                    <!-- 管理员 -->
                     <StackPanel Margin="0,0,0,20">
-                        <TextBlock Text="电话 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
-                        <TextBox x:Name="txtPhone" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
+                        <TextBlock Text="管理员" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBox x:Name="txtManager" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="BorderBrush" Value="#E0E0E0"/>

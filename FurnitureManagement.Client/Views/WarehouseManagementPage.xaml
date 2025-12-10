@@ -71,9 +71,9 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="仓库ID" Binding="{Binding WarehouseId}" Width="80" IsReadOnly="True"/>
                     <DataGridTextColumn Header="仓库名称" Binding="{Binding WarehouseName}" Width="150" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="地址" Binding="{Binding Address}" Width="*" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="联系人" Binding="{Binding ContactPerson}" Width="120" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="电话" Binding="{Binding Phone}" Width="120" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="位置" Binding="{Binding Location}" Width="*" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="容量" Binding="{Binding Capacity}" Width="100" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="管理员" Binding="{Binding Manager}" Width="120" IsReadOnly="True"/>
                     <DataGridTextColumn Header="创建时间" Binding="{Binding CreatedAt, StringFormat='yyyy-MM-dd HH:mm'}" Width="150" IsReadOnly="True"/>
                     <DataGridTemplateColumn Header="操作" Width="150" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>

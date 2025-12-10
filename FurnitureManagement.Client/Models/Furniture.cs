@@ -18,12 +18,32 @@ namespace FurnitureManagement.Client.Models
         /// <summary>
         /// 分类ID
         /// </summary>
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         
         /// <summary>
-        /// 价格
+        /// 型号
         /// </summary>
-        public decimal Price { get; set; }
+        public string? Model { get; set; }
+        
+        /// <summary>
+        /// 材质
+        /// </summary>
+        public string? Material { get; set; }
+        
+        /// <summary>
+        /// 颜色
+        /// </summary>
+        public string? Color { get; set; }
+        
+        /// <summary>
+        /// 进货价格
+        /// </summary>
+        public decimal PurchasePrice { get; set; }
+        
+        /// <summary>
+        /// 销售价格
+        /// </summary>
+        public decimal SalePrice { get; set; }
         
         /// <summary>
         /// 描述
@@ -31,9 +51,9 @@ namespace FurnitureManagement.Client.Models
         public string? Description { get; set; }
         
         /// <summary>
-        /// 图片URL
+        /// 创建人ID
         /// </summary>
-        public string? ImageUrl { get; set; }
+        public int? CreatedBy { get; set; }
         
         /// <summary>
         /// 创建时间
@@ -41,12 +61,7 @@ namespace FurnitureManagement.Client.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         
         /// <summary>
-        /// 更新时间
-        /// </summary>
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
-        
-        /// <summary>
-        /// 所属分类
+        /// 所属分类（导航属性，仅客户端使用）
         /// </summary>
         public Category? Category { get; set; }
     }

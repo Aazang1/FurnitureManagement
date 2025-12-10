@@ -1,4 +1,8 @@
-using System;using System.Collections.Generic;using System.Linq;using System.Text;using System.Threading.Tasks;using System.Windows;using System.Windows.Controls;using System.Windows.Data;using System.Windows.Documents;using System.Windows.Input;using System.Windows.Media;using System.Windows.Media.Imaging;using System.Windows.Navigation;using System.Windows.Shapes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using FurnitureManagement.Client.Servcie;
 using FurnitureManagement.Client.Models;
 
@@ -37,8 +41,8 @@ namespace FurnitureManagement.Client.Views
 
         private void btnAddSupplier_Click(object sender, RoutedEventArgs e)
         {
-            // 添加供应商逻辑
-            var editWindow = new SupplierEditWindow();
+            // 添加供应商逻辑 - 传入null表示新建
+            var editWindow = new SupplierEditWindow(null);
             if (editWindow.ShowDialog() == true)
             {
                 // 刷新供应商列表
@@ -48,12 +52,12 @@ namespace FurnitureManagement.Client.Views
 
         private void btnEditSupplier_Click(object sender, RoutedEventArgs e)
         {
-            // 编辑供应商逻辑
+            // 编辑供应商逻辑 - 传入选中的供应商
             var button = sender as Button;
             var supplier = button?.Tag as Supplier;
             if (supplier != null)
             {
-                var editWindow = new SupplierEditWindow();
+                var editWindow = new SupplierEditWindow(supplier);
                 if (editWindow.ShowDialog() == true)
                 {
                     // 刷新供应商列表
@@ -74,9 +78,16 @@ namespace FurnitureManagement.Client.Views
                 {
                     try
                     {
-                        await _apiService.DeleteSupplierAsync(supplier.SupplierId);
-                        MessageBox.Show("供应商删除成功！", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LoadSuppliersAsync();
+                        var response = await _apiService.DeleteSupplierAsync(supplier.SupplierId);
+                        if (response != null && response.Success)
+                        {
+                            MessageBox.Show("供应商删除成功！", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                            LoadSuppliersAsync();
+                        }
+                        else
+                        {
+                            MessageBox.Show(response?.Message ?? "删除失败", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
                     catch (Exception ex)
                     {

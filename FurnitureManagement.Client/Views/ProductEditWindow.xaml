@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="商品编辑"
         Width="550"
-        Height="450"
+        Height="550"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResizeWithGrip">
     <Grid Background="#F5F5F5">
@@ -60,10 +60,31 @@
                         </ComboBox>
                     </StackPanel>
                     
-                    <!-- 价格 -->
+                    <!-- 进货价格 -->
                     <StackPanel Margin="0,0,0,15">
-                        <TextBlock Text="价格 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
-                        <TextBox x:Name="txtPrice" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center" PreviewTextInput="txtPrice_PreviewTextInput">
+                        <TextBlock Text="进货价格 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBox x:Name="txtPurchasePrice" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center" PreviewTextInput="txtPrice_PreviewTextInput">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </StackPanel>
+                    
+                    <!-- 销售价格 -->
+                    <StackPanel Margin="0,0,0,15">
+                        <TextBlock Text="销售价格 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBox x:Name="txtSalePrice" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center" PreviewTextInput="txtPrice_PreviewTextInput">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="BorderBrush" Value="#E0E0E0"/>
@@ -84,7 +105,7 @@
                     <!-- 描述 -->
                     <StackPanel Margin="0,0,0,20">
                         <TextBlock Text="描述" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
-                        <TextBox x:Name="txtDescription" Width="Auto" Height="100" Padding="10" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto">
+                        <TextBox x:Name="txtDescription" Width="Auto" Height="80" Padding="10" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="BorderBrush" Value="#E0E0E0"/>

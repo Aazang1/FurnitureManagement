@@ -202,8 +202,8 @@ namespace FurnitureManagement.Client
             
             // 隐藏所有内容页面
             HideAllContentGrids();
-            // 显示商品管理页面
-            ProductManageFrame.Navigate(new ProductManagementPage());
+            // 显示商品管理页面，传入当前用户ID
+            ProductManageFrame.Navigate(new ProductManagementPage(_currentUser.UserId));
             ProductManageFrame.Visibility = Visibility.Visible;
         }
 

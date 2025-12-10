@@ -108,10 +108,11 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="商品ID" Binding="{Binding FurnitureId}" Width="80" IsReadOnly="True"/>
                     <DataGridTextColumn Header="商品名称" Binding="{Binding FurnitureName}" Width="150" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="分类" Binding="{Binding Category.CategoryName}" Width="120" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="价格" Binding="{Binding Price, StringFormat='C2'}" Width="100" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="分类" Binding="{Binding Category.CategoryName}" Width="100" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="进货价" Binding="{Binding PurchasePrice, StringFormat='¥{0:N2}'}" Width="100" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="销售价" Binding="{Binding SalePrice, StringFormat='¥{0:N2}'}" Width="100" IsReadOnly="True"/>
                     <DataGridTextColumn Header="描述" Binding="{Binding Description}" Width="*" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="创建时间" Binding="{Binding CreatedAt, StringFormat='yyyy-MM-dd HH:mm'}" Width="150" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="创建时间" Binding="{Binding CreatedAt, StringFormat='yyyy-MM-dd HH:mm'}" Width="130" IsReadOnly="True"/>
                     <DataGridTemplateColumn Header="操作" Width="150" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

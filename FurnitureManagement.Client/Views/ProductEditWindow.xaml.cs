@@ -14,14 +14,16 @@ namespace FurnitureManagement.Client.Views
         private readonly ApiService _apiService;
         private readonly Furniture? _product;
         private readonly List<Category>? _categories;
+        private readonly int? _currentUserId;
         private bool _isEditMode;
 
-        public ProductEditWindow(Furniture? product, List<Category>? categories)
+        public ProductEditWindow(Furniture? product, List<Category>? categories, int? currentUserId = null)
         {
             InitializeComponent();
             _apiService = new ApiService();
             _product = product;
             _categories = categories;
+            _currentUserId = currentUserId;
             _isEditMode = product != null;
             
             InitializeUI();
@@ -44,7 +46,8 @@ namespace FurnitureManagement.Client.Views
             {
                 txtFurnitureName.Text = _product.FurnitureName;
                 cmbCategory.SelectedValue = _product.CategoryId;
-                txtPrice.Text = _product.Price.ToString();
+                txtPurchasePrice.Text = _product.PurchasePrice.ToString("F2");
+                txtSalePrice.Text = _product.SalePrice.ToString("F2");
                 txtDescription.Text = _product.Description ?? string.Empty;
             }
         }
@@ -56,47 +59,55 @@ namespace FurnitureManagement.Client.Views
             if (!ValidateForm())
                 return;
 
+            btnSave.IsEnabled = false;
+
             try
             {
-                // 创建或更新商品对象
-                var product = _isEditMode ? _product : new Furniture();
-                
-                if (product != null)
+                if (_isEditMode && _product != null)
                 {
-                    product.FurnitureName = txtFurnitureName.Text.Trim();
-                    product.CategoryId = (int)cmbCategory.SelectedValue;
-                    product.Price = decimal.Parse(txtPrice.Text.Trim());
-                    product.Description = txtDescription.Text.Trim();
+                    // 更新商品
+                    _product.FurnitureName = txtFurnitureName.Text.Trim();
+                    _product.CategoryId = (int?)cmbCategory.SelectedValue;
+                    _product.PurchasePrice = decimal.Parse(txtPurchasePrice.Text.Trim());
+                    _product.SalePrice = decimal.Parse(txtSalePrice.Text.Trim());
+                    _product.Description = txtDescription.Text.Trim();
                     
-                    if (_isEditMode)
+                    var response = await _apiService.UpdateFurnitureAsync(_product.FurnitureId, _product);
+                    if (response != null && response.Success)
                     {
-                        // 更新商品
-                        var response = await _apiService.UpdateFurnitureAsync(product.FurnitureId, product);
-                        if (response != null && response.Success)
-                        {
-                            MessageBox.Show("商品更新成功！", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
-                            this.DialogResult = true;
-                            this.Close();
-                        }
-                        else
-                        {
-                            ShowError(response?.Message ?? "更新商品失败");
-                        }
+                        MessageBox.Show("商品更新成功！", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                        this.DialogResult = true;
+                        this.Close();
                     }
                     else
                     {
-                        // 创建商品
-                        var createdProduct = await _apiService.CreateFurnitureAsync(product);
-                        if (createdProduct != null)
-                        {
-                            MessageBox.Show("商品添加成功！", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
-                            this.DialogResult = true;
-                            this.Close();
-                        }
-                        else
-                        {
-                            ShowError("添加商品失败");
-                        }
+                        ShowError(response?.Message ?? "更新商品失败");
+                    }
+                }
+                else
+                {
+                    // 创建新商品
+                    var newProduct = new Furniture
+                    {
+                        FurnitureName = txtFurnitureName.Text.Trim(),
+                        CategoryId = (int?)cmbCategory.SelectedValue,
+                        PurchasePrice = decimal.Parse(txtPurchasePrice.Text.Trim()),
+                        SalePrice = decimal.Parse(txtSalePrice.Text.Trim()),
+                        Description = txtDescription.Text.Trim(),
+                        CreatedBy = _currentUserId,
+                        CreatedAt = DateTime.Now
+                    };
+                    
+                    var createdProduct = await _apiService.CreateFurnitureAsync(newProduct);
+                    if (createdProduct != null)
+                    {
+                        MessageBox.Show("商品添加成功！", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                        this.DialogResult = true;
+                        this.Close();
+                    }
+                    else
+                    {
+                        ShowError("添加商品失败");
                     }
                 }
             }
@@ -104,6 +115,10 @@ namespace FurnitureManagement.Client.Views
             {
                 ShowError("保存商品失败，请重试");
                 Console.WriteLine($"保存商品失败: {ex.Message}");
+            }
+            finally
+            {
+                btnSave.IsEnabled = true;
             }
         }
 
@@ -135,16 +150,29 @@ namespace FurnitureManagement.Client.Views
                 return false;
             }
             
-            // 验证价格
-            if (string.IsNullOrWhiteSpace(txtPrice.Text))
+            // 验证进货价格
+            if (string.IsNullOrWhiteSpace(txtPurchasePrice.Text))
             {
-                ShowError("请输入商品价格");
+                ShowError("请输入进货价格");
                 return false;
             }
             
-            if (!decimal.TryParse(txtPrice.Text, out decimal price) || price <= 0)
+            if (!decimal.TryParse(txtPurchasePrice.Text, out decimal purchasePrice) || purchasePrice < 0)
             {
-                ShowError("请输入有效的商品价格");
+                ShowError("请输入有效的进货价格");
+                return false;
+            }
+            
+            // 验证销售价格
+            if (string.IsNullOrWhiteSpace(txtSalePrice.Text))
+            {
+                ShowError("请输入销售价格");
+                return false;
+            }
+            
+            if (!decimal.TryParse(txtSalePrice.Text, out decimal salePrice) || salePrice < 0)
+            {
+                ShowError("请输入有效的销售价格");
                 return false;
             }
             
@@ -161,8 +189,10 @@ namespace FurnitureManagement.Client.Views
         // 价格输入验证，只允许输入数字和小数点
         private void txtPrice_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            Regex regex = new Regex("^[0-9]*[.,]?[0-9]*$");
-            e.Handled = !regex.IsMatch(e.Text);
+            var textBox = sender as TextBox;
+            string newText = textBox?.Text.Insert(textBox.SelectionStart, e.Text) ?? e.Text;
+            Regex regex = new Regex(@"^\d*\.?\d{0,2}$");
+            e.Handled = !regex.IsMatch(newText);
         }
     }
 }
