@@ -1,0 +1,176 @@
+<Page x:Class="FurnitureManagement.Client.Views.InventoryManagementPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:FurnitureManagement.Client.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="库存管理">
+    <Grid Background="#F5F5F5">
+        <StackPanel Margin="20">
+            <!-- 标题和操作按钮 -->
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="库存管理" FontSize="24" FontWeight="Bold" Foreground="#333333"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <ComboBox x:Name="cmbFilter" Width="150" Height="35" Margin="0,0,10,0" 
+                             VerticalContentAlignment="Center" Padding="10">
+                        <ComboBoxItem Content="所有库存" IsSelected="True"/>
+                        <ComboBoxItem Content="按商品筛选"/>
+                        <ComboBoxItem Content="按仓库筛选"/>
+                    </ComboBox>
+                    <TextBox x:Name="txtSearch" Width="250" Height="35" Margin="0,0,10,0" 
+                             VerticalContentAlignment="Center" Padding="10" Visibility="Collapsed">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="BorderBrush" Value="#3498DB"/>
+                                    </Trigger>
+                                    <Trigger Property="IsFocused" Value="True">
+                                        <Setter Property="BorderBrush" Value="#3498DB"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    <Button Content="搜索" Width="80" Height="35" Background="#3498DB" Foreground="White" 
+                            BorderBrush="Transparent" Visibility="Collapsed">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#2980B9"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="添加库存" Width="100" Height="35" Background="#2ECC71" Foreground="White" 
+                            BorderBrush="Transparent" Click="btnAddInventory_Click" Margin="10,0,0,0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#27AE60"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            
+            <!-- 库存列表 -->
+            <DataGrid x:Name="dgInventory" AutoGenerateColumns="False" CanUserAddRows="False" 
+                      SelectionMode="Single" SelectionUnit="FullRow" Background="White"
+                      BorderBrush="#E0E0E0" BorderThickness="1" RowHeight="40">
+                <!-- 列样式 -->
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#F5F5F5"/>
+                        <Setter Property="Foreground" Value="#333333"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="Padding" Value="10"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                
+                <!-- 行样式 -->
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#E6F2FF"/>
+                                <Setter Property="Foreground" Value="#3498DB"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                
+                <!-- 单元格样式 -->
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="Padding" Value="10"/>
+                    </Style>
+                </DataGrid.CellStyle>
+                
+                <!-- 列定义 -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="库存ID" Binding="{Binding InventoryId}" Width="80" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="商品名称" Binding="{Binding Furniture.FurnitureName}" Width="150" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="仓库" Binding="{Binding Warehouse.WarehouseName}" Width="120" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="数量" Binding="{Binding Quantity}" Width="100" IsReadOnly="True">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Quantity}" Value="0">
+                                        <Setter Property="Foreground" Value="#E74C3C"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="最后更新" Binding="{Binding LastUpdated, StringFormat='yyyy-MM-dd HH:mm'}" Width="150" IsReadOnly="True"/>
+                    <DataGridTemplateColumn Header="操作" Width="180" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <!-- 编辑按钮 -->
+                                    <Button Content="编辑" Width="60" Height="28" Background="#F39C12" Foreground="White" 
+                                            BorderBrush="Transparent" Click="btnEditInventory_Click" Tag="{Binding}" Margin="0,0,5,0">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#E67E22"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <!-- 删除按钮 -->
+                                    <Button Content="删除" Width="60" Height="28" Background="#E74C3C" Foreground="White" 
+                                            BorderBrush="Transparent" Click="btnDeleteInventory_Click" Tag="{Binding}" Margin="0,0,5,0">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#C0392B"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <!-- 调整数量按钮 -->
+                                    <Button Content="调整数量" Width="80" Height="28" Background="#3498DB" Foreground="White" 
+                                            BorderBrush="Transparent" Click="btnAdjustQuantity_Click" Tag="{Binding}">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#2980B9"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -1,0 +1,6 @@
+@FurnitureManagement.Server_HostAddress = http://localhost:5192
+
+GET {{FurnitureManagement.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

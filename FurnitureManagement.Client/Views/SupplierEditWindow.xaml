@@ -1,0 +1,160 @@
+<Window x:Class="FurnitureManagement.Client.Views.SupplierEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FurnitureManagement.Client.Views"
+        mc:Ignorable="d"
+        Title="供应商编辑"
+        Width="550"
+        Height="450"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResizeWithGrip">
+    <Grid Background="#F5F5F5">
+        <StackPanel Margin="20">
+            <!-- 标题 -->
+            <TextBlock x:Name="txtTitle" Text="添加供应商" FontSize="20" FontWeight="Bold" Margin="0,0,0,20" Foreground="#333333"/>
+            
+            <!-- 表单区域 -->
+            <Border Background="White" Padding="20" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8">
+                <StackPanel>
+                    <!-- 供应商名称 -->
+                    <StackPanel Margin="0,0,0,15">
+                        <TextBlock Text="供应商名称 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBox x:Name="txtSupplierName" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </StackPanel>
+                    
+                    <!-- 联系人 -->
+                    <StackPanel Margin="0,0,0,15">
+                        <TextBlock Text="联系人 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBox x:Name="txtContactPerson" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </StackPanel>
+                    
+                    <!-- 电话 -->
+                    <StackPanel Margin="0,0,0,15">
+                        <TextBlock Text="电话 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBox x:Name="txtPhone" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </StackPanel>
+                    
+                    <!-- 邮箱 -->
+                    <StackPanel Margin="0,0,0,15">
+                        <TextBlock Text="邮箱 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBox x:Name="txtEmail" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </StackPanel>
+                    
+                    <!-- 地址 -->
+                    <StackPanel Margin="0,0,0,20">
+                        <TextBlock Text="地址 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBox x:Name="txtAddress" Width="Auto" Height="80" Padding="10" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </StackPanel>
+                    
+                    <!-- 错误信息 -->
+                    <TextBlock x:Name="txtError" FontSize="12" Foreground="#E74C3C" Margin="0,0,0,15" Visibility="Collapsed"/>
+                    
+                    <!-- 按钮区域 -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="取消" Width="80" Height="35" Margin="0,0,10,0" Background="#E0E0E0" Foreground="#333333" 
+                                BorderBrush="Transparent" Click="btnCancel_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#BDBDBD"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="btnSave" Content="保存" Width="80" Height="35" Background="#3498DB" Foreground="White" 
+                                BorderBrush="Transparent" Click="btnSave_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#2980B9"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>
