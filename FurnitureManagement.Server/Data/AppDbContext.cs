@@ -15,6 +15,8 @@ namespace FurnitureManagement.Server.Data
         public DbSet<Supplier> Supplier { get; set; }
         public DbSet<Warehouse> Warehouse { get; set; }
         public DbSet<Inventory> Inventory { get; set; }
+        public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
+        public DbSet<PurchaseDetail> PurchaseDetail { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +47,20 @@ namespace FurnitureManagement.Server.Data
             // 配置Inventory表
             modelBuilder.Entity<Inventory>().ToTable("inventory");
             modelBuilder.Entity<Inventory>().HasKey(i => i.InventoryId);
+
+            // 配置PurchaseOrder表
+            modelBuilder.Entity<PurchaseOrder>().ToTable("purchase_order");
+            modelBuilder.Entity<PurchaseOrder>().HasKey(po => po.PurchaseOrderId);
+
+            // 配置PurchaseDetail表
+            modelBuilder.Entity<PurchaseDetail>().ToTable("purchase_detail");
+            modelBuilder.Entity<PurchaseDetail>().HasKey(pd => pd.PurchaseDetailId);
+
+            // 配置PurchaseOrder和PurchaseDetail之间的一对多关系
+            modelBuilder.Entity<PurchaseOrder>()
+                .HasMany(po => po.PurchaseDetails)
+                .WithOne(pd => pd.PurchaseOrder)
+                .HasForeignKey(pd => pd.PurchaseOrderId);
         }
     }
 }

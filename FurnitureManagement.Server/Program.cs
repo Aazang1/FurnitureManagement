@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using System.Text.Json.Serialization; // 需要添加这个命名空间
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,16 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<FurnitureManagement.Server.Data.AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-builder.Services.AddControllers();
+// 修改这行：在 AddControllers() 后面添加 JSON 配置
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // 解决 JSON 序列化时的循环引用问题
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        // 可选：忽略 null 值
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
