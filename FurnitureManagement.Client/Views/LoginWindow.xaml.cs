@@ -1,3 +1,6 @@
+using System.IO;
+using System.IO.IsolatedStorage;
+using System.Text;
 using System.Windows;
 using FurnitureManagement.Client.Models;
 using FurnitureManagement.Client.Servcie;
@@ -11,11 +14,13 @@ namespace FurnitureManagement.Client.Views
     public partial class LoginWindow : Window
     {
         private readonly ApiService _apiService;
+        private const string LoginInfoFile = "logininfo.txt";
 
         public LoginWindow()
         {
             InitializeComponent();
             _apiService = new ApiService();
+            LoadLoginInfo();
         }
 
         // 登录按钮点击事件
@@ -47,9 +52,14 @@ namespace FurnitureManagement.Client.Views
                 {
                     if (response.Success && response.User != null)
                     {
-                        // 登录成功，设置会话并打开主窗口
-                        Console.WriteLine("登录成功，准备打开主窗口...");
+                        // 登录成功，保存登录信息
+                        SaveLoginInfo();
+                        
+                        // 设置用户会话
                         UserSession.CurrentUser = response.User;
+                        
+                        // 打开主窗口
+                        Console.WriteLine("登录成功，准备打开主窗口...");
                         var mainWindow = new MainWindow();
                         mainWindow.Show();
                         this.Close();
@@ -97,6 +107,85 @@ namespace FurnitureManagement.Client.Views
             // 打开注册窗口
             var registerWindow = new RegisterWindow();
             registerWindow.ShowDialog();
+        }
+
+        // 加载登录信息
+        private void LoadLoginInfo()
+        {
+            try
+            {
+                using (var store = IsolatedStorageFile.GetUserStoreForAssembly())
+                {
+                    if (store.FileExists(LoginInfoFile))
+                    {
+                        using (var stream = new IsolatedStorageFileStream(LoginInfoFile, FileMode.Open, store))
+                        using (var reader = new StreamReader(stream))
+                        {
+                            string line = reader.ReadLine();
+                            if (!string.IsNullOrEmpty(line))
+                            {
+                                string[] parts = line.Split('|');
+                                if (parts.Length >= 4)
+                                {
+                                    txtUsername.Text = parts[0];
+                                    txtPassword.Password = DecodeBase64(parts[1]);
+                                    chkRememberPassword.IsChecked = bool.Parse(parts[2]);
+                                    chkAutoLogin.IsChecked = bool.Parse(parts[3]);
+
+                                    // 如果自动登录选项为true，则自动执行登录
+                                    if (chkAutoLogin.IsChecked == true)
+                                    {
+                                        btnLogin_Click(null, null);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"加载登录信息失败: {ex.Message}");
+            }
+        }
+
+        // 保存登录信息
+        private void SaveLoginInfo()
+        {
+            try
+            {
+                using (var store = IsolatedStorageFile.GetUserStoreForAssembly())
+                {
+                    using (var stream = new IsolatedStorageFileStream(LoginInfoFile, FileMode.Create, store))
+                    using (var writer = new StreamWriter(stream))
+                    {
+                        string username = txtUsername.Text.Trim();
+                        string password = chkRememberPassword.IsChecked == true ? EncodeBase64(txtPassword.Password) : string.Empty;
+                        bool rememberPassword = chkRememberPassword.IsChecked == true;
+                        bool autoLogin = chkAutoLogin.IsChecked == true;
+
+                        writer.WriteLine($"{username}|{password}|{rememberPassword}|{autoLogin}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"保存登录信息失败: {ex.Message}");
+            }
+        }
+
+        // Base64编码
+        private string EncodeBase64(string input)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(input);
+            return Convert.ToBase64String(bytes);
+        }
+
+        // Base64解码
+        private string DecodeBase64(string input)
+        {
+            byte[] bytes = Convert.FromBase64String(input);
+            return Encoding.UTF8.GetString(bytes);
         }
     }
 }

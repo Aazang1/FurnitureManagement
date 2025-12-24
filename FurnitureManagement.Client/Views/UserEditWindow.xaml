@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="用户编辑"
         Width="550"
-        Height="700"
+        Height="920"
         ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen"
         Background="#F5F5F5">

@@ -403,6 +403,129 @@ namespace FurnitureManagement.Client.Servcie
 
         #endregion
 
+        #region Purchase 采购相关接口
+
+        // 获取所有采购订单
+        public async Task<List<PurchaseOrder>?> GetPurchaseOrdersAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Purchase");
+                return await response.Content.ReadFromJsonAsync<List<PurchaseOrder>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取采购订单列表失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 创建采购订单
+        public async Task<PurchaseOrder?> CreatePurchaseOrderAsync(PurchaseOrder order)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("Purchase", order);
+                return await response.Content.ReadFromJsonAsync<PurchaseOrder>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"创建采购订单失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 完成采购订单
+        public async Task<ApiResponse?> CompletePurchaseOrderAsync(int id)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsync($"Purchase/{id}/complete", null);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "采购订单已完成" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = "完成采购订单失败" };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"完成采购订单失败: {ex.Message}");
+                return new ApiResponse { Success = false, Message = "网络请求失败" };
+            }
+        }
+
+        // 取消采购订单
+        public async Task<ApiResponse?> CancelPurchaseOrderAsync(int id)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsync($"Purchase/{id}/cancel", null);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "采购订单已取消" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = "取消采购订单失败" };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"取消采购订单失败: {ex.Message}");
+                return new ApiResponse { Success = false, Message = "网络请求失败" };
+            }
+        }
+
+        // 按供应商查询采购订单
+        public async Task<List<PurchaseOrder>?> GetPurchaseOrdersBySupplierAsync(int supplierId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"Purchase/by-supplier/{supplierId}");
+                return await response.Content.ReadFromJsonAsync<List<PurchaseOrder>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"按供应商查询采购订单失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 按商品查询采购订单
+        public async Task<List<PurchaseOrder>?> GetPurchaseOrdersByFurnitureAsync(int furnitureId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"Purchase/by-furniture/{furnitureId}");
+                return await response.Content.ReadFromJsonAsync<List<PurchaseOrder>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"按商品查询采购订单失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 获取采购统计信息
+        public async Task<object?> GetPurchaseStatisticsAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Purchase/statistics");
+                return await response.Content.ReadFromJsonAsync<object>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取采购统计信息失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        #endregion
+
         #region Inventory 库存相关接口
 
         // 获取所有库存
@@ -764,6 +887,232 @@ namespace FurnitureManagement.Client.Servcie
             }
         }
         
+        #endregion
+
+        #region SaleOrder 销售订单相关接口
+
+        // 获取销售订单列表（支持筛选和搜索）
+        public async Task<List<SaleOrder>?> GetSaleOrdersAsync(
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            string? status = null,
+            string? search = null)
+        {
+            try
+            {
+                var queryParams = new List<string>();
+                
+                if (startDate.HasValue)
+                {
+                    queryParams.Add($"startDate={startDate.Value:yyyy-MM-dd}");
+                }
+                if (endDate.HasValue)
+                {
+                    queryParams.Add($"endDate={endDate.Value:yyyy-MM-dd}");
+                }
+                if (!string.IsNullOrEmpty(status))
+                {
+                    queryParams.Add($"status={status}");
+                }
+                if (!string.IsNullOrEmpty(search))
+                {
+                    queryParams.Add($"search={Uri.EscapeDataString(search)}");
+                }
+                
+                var queryString = queryParams.Count > 0 ? $"?{string.Join("&", queryParams)}" : "";
+                var response = await _httpClient.GetAsync($"SaleOrder{queryString}");
+                return await response.Content.ReadFromJsonAsync<List<SaleOrder>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取销售订单列表失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 根据ID获取销售订单
+        public async Task<SaleOrder?> GetSaleOrderByIdAsync(int id)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"SaleOrder/{id}");
+                return await response.Content.ReadFromJsonAsync<SaleOrder>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取销售订单失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 创建销售订单
+        public async Task<SaleOrder?> CreateSaleOrderAsync(SaleOrder saleOrder)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("SaleOrder", saleOrder);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<SaleOrder>();
+                }
+                else
+                {
+                    // 获取详细的错误信息
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"创建销售订单失败: {response.StatusCode}, 详细信息: {errorMessage}");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"创建销售订单失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 更新销售订单
+        public async Task<ApiResponse?> UpdateSaleOrderAsync(int id, SaleOrder saleOrder)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync($"SaleOrder/{id}", saleOrder);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "更新成功" };
+                }
+                else
+                {
+                    // 获取详细的错误信息
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    return new ApiResponse { Success = false, Message = $"更新失败: {response.StatusCode}, 详细信息: {errorMessage}" };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"更新销售订单失败: {ex.Message}");
+                return new ApiResponse { Success = false, Message = "网络请求失败" };
+            }
+        }
+
+        // 更新销售订单状态
+        public async Task<ApiResponse?> UpdateSaleOrderStatusAsync(int id, string status)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync($"SaleOrder/{id}/status", status);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "状态更新成功" };
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    return new ApiResponse { Success = false, Message = $"状态更新失败: {errorContent}" };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"更新销售订单状态失败: {ex.Message}");
+                return new ApiResponse { Success = false, Message = "网络请求失败" };
+            }
+        }
+
+        // 删除销售订单
+        public async Task<ApiResponse?> DeleteSaleOrderAsync(int id)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"SaleOrder/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "删除成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"删除失败: {response.StatusCode}" };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"删除销售订单失败: {ex.Message}");
+                return new ApiResponse { Success = false, Message = "网络请求失败" };
+            }
+        }
+
+        // 获取销售订单明细
+        public async Task<List<SaleDetail>?> GetSaleDetailsAsync(int saleId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"SaleOrder/{saleId}/details");
+                return await response.Content.ReadFromJsonAsync<List<SaleDetail>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取销售订单明细失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 添加销售明细
+        public async Task<SaleDetail?> AddSaleDetailAsync(int saleId, SaleDetail saleDetail)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync($"SaleOrder/{saleId}/details", saleDetail);
+                return await response.Content.ReadFromJsonAsync<SaleDetail>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"添加销售明细失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 更新销售明细
+        public async Task<ApiResponse?> UpdateSaleDetailAsync(int detailId, SaleDetail saleDetail)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync($"SaleOrder/details/{detailId}", saleDetail);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "更新成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"更新失败: {response.StatusCode}" };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"更新销售明细失败: {ex.Message}");
+                return new ApiResponse { Success = false, Message = "网络请求失败" };
+            }
+        }
+
+        // 删除销售明细
+        public async Task<ApiResponse?> DeleteSaleDetailAsync(int detailId)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"SaleOrder/details/{detailId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "删除成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"删除失败: {response.StatusCode}" };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"删除销售明细失败: {ex.Message}");
+                return new ApiResponse { Success = false, Message = "网络请求失败" };
+            }
+        }
+
         #endregion
     }
 }

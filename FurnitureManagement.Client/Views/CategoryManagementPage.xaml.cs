@@ -53,7 +53,7 @@ namespace FurnitureManagement.Client.Views
             var category = button?.Tag as Category;
             if (category != null)
             {
-                var editWindow = new CategoryEditWindow();
+                var editWindow = new CategoryEditWindow(category);
                 if (editWindow.ShowDialog() == true)
                 {
                     // 刷新分类列表

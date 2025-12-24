@@ -1,0 +1,169 @@
+<Window x:Class="FurnitureManagement.Client.Views.CreatePurchaseOrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:FurnitureManagement.Client.Views"
+        xmlns:models="clr-namespace:FurnitureManagement.Client.Models"
+        mc:Ignorable="d"
+        d:DesignHeight="600"
+        d:DesignWidth="800"
+        Title="创建采购订单"
+        WindowStartupLocation="CenterOwner"
+        Background="#F5F5F5">
+    <Grid>
+        <StackPanel Margin="20">
+            <!-- 标题 -->
+            <TextBlock Text="创建采购订单" FontSize="24" FontWeight="Bold" Margin="0,0,0,30" HorizontalAlignment="Center" Foreground="#333333"/>
+            
+            <!-- 主要内容 -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- 左侧：采购订单基本信息 -->
+                <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                    <Border Background="White" Padding="20" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5">
+                        <StackPanel>
+                            <TextBlock Text="采购订单信息" FontSize="18" FontWeight="Bold" Margin="0,0,0,20"/>
+                            
+                            <!-- 供应商选择 -->
+                            <StackPanel Margin="0,0,0,15">
+                                <TextBlock Text="供应商 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,10" Foreground="#333333"/>
+                                <ComboBox x:Name="cmbSupplier" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
+                                    <ComboBox.Style>
+                                        <Style TargetType="ComboBox">
+                                            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#409EFF"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+                                </ComboBox>
+                            </StackPanel>
+                            
+                            <!-- 采购日期 -->
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="采购日期 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,10" Foreground="#333333"/>
+                                <DatePicker x:Name="dpPurchaseDate" Width="Auto" Height="35"/>                </StackPanel>
+                            
+                            <!-- 订单总金额 -->
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="订单总金额" FontSize="14" FontWeight="Medium" Margin="0,0,0,10" Foreground="#333333"/>
+                                <TextBlock x:Name="txtTotalAmount" FontSize="24" FontWeight="Bold" Foreground="#3498DB"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                
+                <!-- 右侧：采购明细 -->
+                <StackPanel Grid.Column="1">
+                    <Border Background="White" Padding="20" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,20">
+                                <Button x:Name="btnAddDetail" Content="添加采购明细" FontSize="14" Padding="15,10" Background="#409EFF" Foreground="White"
+                                        BorderBrush="Transparent" BorderThickness="0" Click="btnAddDetail_Click">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#66B1FF"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </StackPanel>
+                            
+                            <!-- 采购明细列表 -->
+                            <DataGrid x:Name="dgPurchaseDetails" AutoGenerateColumns="False" FontSize="14" CanUserAddRows="False" SelectionMode="Single" SelectionUnit="FullRow"
+                                      Background="White" BorderBrush="#E0E0E0" BorderThickness="1" RowHeight="45" AlternatingRowBackground="#F9F9F9">
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Background" Value="#F5F5F5"/>
+                                        <Setter Property="Foreground" Value="#333333"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                        <Setter Property="Padding" Value="10,12"/>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                                
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="商品" Width="150">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ComboBox ItemsSource="{Binding FurnitureList}" SelectedItem="{Binding Furniture}" DisplayMemberPath="FurnitureName" SelectedValuePath="FurnitureId" Width="140" VerticalContentAlignment="Center"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="仓库" Width="150">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ComboBox ItemsSource="{Binding WarehouseList}" SelectedItem="{Binding Warehouse}" DisplayMemberPath="WarehouseName" SelectedValuePath="WarehouseId" Width="140" VerticalContentAlignment="Center"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="数量" Width="80" Binding="{Binding Quantity}" IsReadOnly="False"/>
+                                    <DataGridTextColumn Header="单价" Width="80" Binding="{Binding UnitPrice}" IsReadOnly="False"/>
+                                    <DataGridTextColumn Header="金额" Width="100" Binding="{Binding Amount, StringFormat=C}" IsReadOnly="True"/>
+                                    <DataGridTemplateColumn Header="操作" Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="删除" FontSize="12" Padding="8,5" Background="#E74C3C" Foreground="White"
+                                                        BorderBrush="Transparent" BorderThickness="0" Click="btnDeleteDetail_Click" Tag="{Binding}">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="#C0392B"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+            
+            <!-- 底部按钮 -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <Button x:Name="btnCancel" Content="取消" FontSize="14" Padding="20,12" Width="100" Margin="0,0,10,0" Background="#E0E0E0" Foreground="#333333"
+                        BorderBrush="Transparent" BorderThickness="0" Click="btnCancel_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#BDBDBD"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button x:Name="btnSave" Content="保存" FontSize="14" Padding="20,12" Width="100" Background="#409EFF" Foreground="White"
+                        BorderBrush="Transparent" BorderThickness="0" Click="btnSave_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#66B1FF"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

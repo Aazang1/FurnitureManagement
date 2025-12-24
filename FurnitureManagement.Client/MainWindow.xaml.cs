@@ -123,6 +123,7 @@ namespace FurnitureManagement.Client
             btnFinanceManage.Background = defaultBackground;
             btnReportManage.Background = defaultBackground;
             btnProductManage.Background = defaultBackground;
+            btnCategoryManage.Background = defaultBackground;
             btnSupplierManage.Background = defaultBackground;
             btnWarehouseManage.Background = defaultBackground;
             btnUserManage.Background = defaultBackground;
@@ -150,8 +151,16 @@ namespace FurnitureManagement.Client
             var result = MessageBox.Show("确定要退出登录吗？", "确认", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
-                // 清除会话信息
-                UserSession.Clear();
+                // 清除登录信息，防止自动登录
+                using (var store = System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForAssembly())
+                {
+                    string loginInfoFile = "logininfo.txt";
+                    if (store.FileExists(loginInfoFile))
+                    {
+                        store.DeleteFile(loginInfoFile);
+                    }
+                }
+                
                 // 关闭当前窗口，打开登录窗口
                 var loginWindow = new LoginWindow();
                 loginWindow.Show();
@@ -190,8 +199,9 @@ namespace FurnitureManagement.Client
 
             // 隐藏所有内容页面
             HideAllContentGrids();
-            // 显示进货管理页面
-            PurchaseManageGrid.Visibility = Visibility.Visible;
+            // 显示采购管理页面
+            PurchaseManageFrame.Navigate(new PurchaseManagementPage());
+            PurchaseManageFrame.Visibility = Visibility.Visible;
         }
 
         // 销售管理按钮点击事件
@@ -204,8 +214,9 @@ namespace FurnitureManagement.Client
 
             // 隐藏所有内容页面
             HideAllContentGrids();
-            // 显示销售管理页面
-            SalesManageGrid.Visibility = Visibility.Visible;
+            // 显示销售管理页面，传递当前用户ID
+            SalesManageFrame.Navigate(new SaleOrderManagementPage(UserSession.CurrentUser?.UserId ?? 0));
+            SalesManageFrame.Visibility = Visibility.Visible;
         }
 
         // 资金管理按钮点击事件
@@ -251,6 +262,21 @@ namespace FurnitureManagement.Client
             ProductManageFrame.Visibility = Visibility.Visible;
         }
 
+        // 分类管理按钮点击事件
+        private void btnCategoryManage_Click(object sender, RoutedEventArgs e)
+        {
+            // 重置所有导航按钮样式
+            ResetNavButtonStyles();
+            // 设置当前按钮为激活状态
+            SetActiveNavButton(btnCategoryManage);
+            
+            // 隐藏所有内容页面
+            HideAllContentGrids();
+            // 显示分类管理页面
+            CategoryManageFrame.Navigate(new CategoryManagementPage());
+            CategoryManageFrame.Visibility = Visibility.Visible;
+        }
+
         // 供应商管理按钮点击事件
         private void btnSupplierManage_Click(object sender, RoutedEventArgs e)
         {
@@ -286,11 +312,12 @@ namespace FurnitureManagement.Client
         {
             SystemOverviewGrid.Visibility = Visibility.Collapsed;
             InventoryManageFrame.Visibility = Visibility.Collapsed;
-            PurchaseManageGrid.Visibility = Visibility.Collapsed;
-            SalesManageGrid.Visibility = Visibility.Collapsed;
+            PurchaseManageFrame.Visibility = Visibility.Collapsed;
+            SalesManageFrame.Visibility = Visibility.Collapsed;
             FinanceManageGrid.Visibility = Visibility.Collapsed;
             ReportManageGrid.Visibility = Visibility.Collapsed;
             ProductManageFrame.Visibility = Visibility.Collapsed;
+            CategoryManageFrame.Visibility = Visibility.Collapsed;
             SupplierManageFrame.Visibility = Visibility.Collapsed;
             WarehouseManageFrame.Visibility = Visibility.Collapsed;
             UserManageGrid.Visibility = Visibility.Collapsed;

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="库存编辑"
         Width="550"
-        Height="350"
+        Height="450"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResizeWithGrip">
     <Grid Background="#F5F5F5">

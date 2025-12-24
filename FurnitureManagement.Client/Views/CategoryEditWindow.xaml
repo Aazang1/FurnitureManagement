@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:FurnitureManagement.Client.Views"
         mc:Ignorable="d"
         Title="分类编辑"
-        Width="550"
-        Height="350"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="CanResizeWithGrip">
+    Width="550"
+    Height="400"
+    WindowStartupLocation="CenterScreen"
+    ResizeMode="CanResizeWithGrip">
     <Grid Background="#F5F5F5">
         <StackPanel Margin="20">
             <!-- 标题 -->
