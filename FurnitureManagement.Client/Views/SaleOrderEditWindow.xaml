@@ -1,0 +1,351 @@
+<Window x:Class="FurnitureManagement.Client.Views.SaleOrderEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FurnitureManagement.Client.Views"
+        xmlns:converters="clr-namespace:FurnitureManagement.Client.Converters"
+        mc:Ignorable="d"
+        Title="销售订单编辑"
+        Width="800"
+        Height="700"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResizeWithGrip">
+    <Window.Resources>
+        <!-- 反布尔值转换器 -->
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </Window.Resources>
+    <Grid Background="#F5F5F5">
+        <StackPanel Margin="20">
+            <!-- 标题 -->
+            <TextBlock x:Name="txtTitle" Text="添加销售订单" FontSize="20" FontWeight="Bold" Margin="0,0,0,20" Foreground="#333333"/>
+            
+            <!-- 表单区域 -->
+            <Border Background="White" Padding="20" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8">
+                <StackPanel>
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- 客户姓名 -->
+                        <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                            <TextBlock Text="客户姓名 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                            <TextBox x:Name="txtCustomerName" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                            </Trigger>
+                                            <Trigger Property="IsFocused" Value="True">
+                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </StackPanel>
+                        
+                        <!-- 客户电话 -->
+                        <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                            <TextBlock Text="客户电话 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                            <TextBox x:Name="txtCustomerPhone" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                            </Trigger>
+                                            <Trigger Property="IsFocused" Value="True">
+                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </StackPanel>
+                        
+                        <!-- 销售日期 -->
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="销售日期 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                            <DatePicker x:Name="dpSaleDate" Width="Auto" Height="35"/>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!-- 销售明细区域 -->
+                    <StackPanel Margin="0,0,0,20">
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="销售明细 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                            <Button Grid.Column="1" Content="添加明细" Width="100" Height="35" Background="#2ECC71" Foreground="White" 
+                                    BorderBrush="Transparent" Click="btnAddDetail_Click" HorizontalAlignment="Right" IsEnabled="{Binding ElementName=chkIsViewMode, Path=IsChecked, Converter={StaticResource InverseBooleanConverter}}">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#27AE60"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Grid>
+                        
+                        <!-- 销售明细列表 -->
+                        <DataGrid x:Name="dgSaleDetails" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                  SelectionMode="Single" SelectionUnit="FullRow" Background="White"
+                                  BorderBrush="#E0E0E0" BorderThickness="1" RowHeight="40" IsReadOnly="{Binding ElementName=chkIsViewMode, Path=IsChecked}"
+                                  LoadingRow="dgSaleDetails_LoadingRow">
+                            <!-- 列样式 -->
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#F5F5F5"/>
+                                    <Setter Property="Foreground" Value="#333333"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                    <Setter Property="Padding" Value="10"/>
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+                            
+                            <!-- 行样式 -->
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#E6F2FF"/>
+                                            <Setter Property="Foreground" Value="#3498DB"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+                            
+                            <!-- 单元格样式 -->
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                    <Setter Property="Padding" Value="10"/>
+                                </Style>
+                            </DataGrid.CellStyle>
+                            
+                            <!-- 列定义 -->
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="家具" Width="200">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox x:Name="cmbFurniture" Width="Auto" Height="28" Padding="5" VerticalContentAlignment="Center" 
+                                                      SelectedValuePath="FurnitureId" DisplayMemberPath="FurnitureName" SelectionChanged="cmbFurniture_SelectionChanged" Tag="{Binding}">
+                                                <ComboBox.Style>
+                                                    <Style TargetType="ComboBox">
+                                                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsFocused" Value="True">
+                                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ComboBox.Style>
+                                            </ComboBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="数量" Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox x:Name="txtQuantity" Width="80" Height="28" Padding="5" VerticalContentAlignment="Center" 
+                                                     Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, TargetNullValue=0, StringFormat=N0}" PreviewTextInput="txtQuantity_PreviewTextInput" Tag="{Binding}">
+                                                <TextBox.Style>
+                                                    <Style TargetType="TextBox">
+                                                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsFocused" Value="True">
+                                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBox.Style>
+                                            </TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="单价" Binding="{Binding UnitPrice, StringFormat='¥{0:N2}'}" Width="100" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="总价" Binding="{Binding TotalPrice, StringFormat='¥{0:N2}'}" Width="120" IsReadOnly="True"/>
+                                <DataGridTemplateColumn Header="仓库" Width="150">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox x:Name="cmbWarehouse" Width="Auto" Height="28" Padding="5" VerticalContentAlignment="Center" 
+                                                      SelectedValuePath="WarehouseId" DisplayMemberPath="WarehouseName" Tag="{Binding}" SelectionChanged="cmbWarehouse_SelectionChanged">
+                                                <ComboBox.Style>
+                                                    <Style TargetType="ComboBox">
+                                                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsFocused" Value="True">
+                                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ComboBox.Style>
+                                            </ComboBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="操作" Width="100" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="删除" Width="60" Height="28" Background="#E74C3C" Foreground="White" 
+                                                    BorderBrush="Transparent" Click="btnDeleteDetail_Click" Tag="{Binding}" IsEnabled="{Binding ElementName=chkIsViewMode, Path=IsChecked, Converter={StaticResource InverseBooleanConverter}}">
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#C0392B"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    
+                    <!-- 金额信息 -->
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                            <TextBlock Text="总金额" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                            <TextBox x:Name="txtTotalAmount" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center" IsReadOnly="True" Background="#F5F5F5">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="折扣" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                            <TextBox x:Name="txtDiscount" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center" 
+                                     Text="0.00" PreviewTextInput="txtDiscount_PreviewTextInput" IsReadOnly="{Binding ElementName=chkIsViewMode, Path=IsChecked}">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                            </Trigger>
+                                            <Trigger Property="IsFocused" Value="True">
+                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="2" Margin="0,0,15,0">
+                            <TextBlock Text="最终金额" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                            <TextBox x:Name="txtFinalAmount" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center" IsReadOnly="True" Background="#F5F5F5">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="3">
+                            <TextBlock Text="状态" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                            <ComboBox x:Name="cmbStatus" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center" IsEnabled="{Binding ElementName=chkIsViewMode, Path=IsChecked, Converter={StaticResource InverseBooleanConverter}}">
+                                <ComboBoxItem Content="待处理" Tag="pending"/>
+                                <ComboBoxItem Content="已完成" Tag="completed"/>
+                                <ComboBoxItem Content="已取消" Tag="cancelled"/>
+                                <ComboBox.Style>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                            </Trigger>
+                                            <Trigger Property="IsFocused" Value="True">
+                                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ComboBox.Style>
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!-- 错误信息 -->
+                    <TextBlock x:Name="txtError" FontSize="12" Foreground="#E74C3C" Margin="0,0,0,15" Visibility="Collapsed"/>
+                    
+                    <!-- 隐藏的查看模式标记 -->
+                    <CheckBox x:Name="chkIsViewMode" Visibility="Collapsed"/>
+                    
+                    <!-- 按钮区域 -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="取消" Width="80" Height="35" Margin="0,0,10,0" Background="#E0E0E0" Foreground="#333333" 
+                                BorderBrush="Transparent" Click="btnCancel_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#BDBDBD"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="btnSave" Content="保存" Width="80" Height="35" Background="#3498DB" Foreground="White" 
+                                BorderBrush="Transparent" Click="btnSave_Click" IsEnabled="{Binding ElementName=chkIsViewMode, Path=IsChecked, Converter={StaticResource InverseBooleanConverter}}">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#2980B9"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -303,12 +303,7 @@
             </Grid>
             
             <!-- 销售管理内容区域 -->
-            <Grid x:Name="SalesManageGrid" Visibility="Collapsed">
-                <StackPanel Margin="20,20,20,20" Background="White">
-                    <TextBlock Text="销售管理" FontSize="24" FontWeight="Bold" Margin="20,20,0,30" Foreground="#333333"/>
-                    <TextBlock Text="销售管理功能正在开发中..." FontSize="16" Margin="20,0,0,0" Foreground="#666666"/>
-                </StackPanel>
-            </Grid>
+            <Frame x:Name="SalesManageFrame" Visibility="Collapsed" NavigationUIVisibility="Hidden"/>
             
             <!-- 资金管理内容区域 -->
             <Grid x:Name="FinanceManageGrid" Visibility="Collapsed">

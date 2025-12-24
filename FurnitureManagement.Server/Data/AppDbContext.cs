@@ -15,6 +15,8 @@ namespace FurnitureManagement.Server.Data
         public DbSet<Supplier> Supplier { get; set; }
         public DbSet<Warehouse> Warehouse { get; set; }
         public DbSet<Inventory> Inventory { get; set; }
+        public DbSet<SaleOrder> SaleOrder { get; set; }
+        public DbSet<SaleDetail> SaleDetail { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +47,22 @@ namespace FurnitureManagement.Server.Data
             // 配置Inventory表
             modelBuilder.Entity<Inventory>().ToTable("inventory");
             modelBuilder.Entity<Inventory>().HasKey(i => i.InventoryId);
+
+            // 配置SaleOrder表
+            modelBuilder.Entity<SaleOrder>().ToTable("sale_order");
+            modelBuilder.Entity<SaleOrder>().HasKey(so => so.SaleId);
+            modelBuilder.Entity<SaleOrder>().HasIndex(so => so.SaleDate).HasDatabaseName("idx_sale_date");
+
+            // 配置SaleDetail表
+            modelBuilder.Entity<SaleDetail>().ToTable("sale_detail");
+            modelBuilder.Entity<SaleDetail>().HasKey(sd => sd.DetailId);
+            
+            // 配置销售订单和销售明细的一对多关系
+            modelBuilder.Entity<SaleOrder>()
+                .HasMany(so => so.SaleDetails)
+                .WithOne(sd => sd.SaleOrder)
+                .HasForeignKey(sd => sd.SaleId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
