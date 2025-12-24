@@ -363,6 +363,129 @@ namespace FurnitureManagement.Client.Servcie
 
         #endregion
 
+        #region Purchase 采购相关接口
+
+        // 获取所有采购订单
+        public async Task<List<PurchaseOrder>?> GetPurchaseOrdersAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Purchase");
+                return await response.Content.ReadFromJsonAsync<List<PurchaseOrder>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取采购订单列表失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 创建采购订单
+        public async Task<PurchaseOrder?> CreatePurchaseOrderAsync(PurchaseOrder order)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("Purchase", order);
+                return await response.Content.ReadFromJsonAsync<PurchaseOrder>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"创建采购订单失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 完成采购订单
+        public async Task<ApiResponse?> CompletePurchaseOrderAsync(int id)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsync($"Purchase/{id}/complete", null);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "采购订单已完成" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = "完成采购订单失败" };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"完成采购订单失败: {ex.Message}");
+                return new ApiResponse { Success = false, Message = "网络请求失败" };
+            }
+        }
+
+        // 取消采购订单
+        public async Task<ApiResponse?> CancelPurchaseOrderAsync(int id)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsync($"Purchase/{id}/cancel", null);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "采购订单已取消" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = "取消采购订单失败" };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"取消采购订单失败: {ex.Message}");
+                return new ApiResponse { Success = false, Message = "网络请求失败" };
+            }
+        }
+
+        // 按供应商查询采购订单
+        public async Task<List<PurchaseOrder>?> GetPurchaseOrdersBySupplierAsync(int supplierId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"Purchase/by-supplier/{supplierId}");
+                return await response.Content.ReadFromJsonAsync<List<PurchaseOrder>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"按供应商查询采购订单失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 按商品查询采购订单
+        public async Task<List<PurchaseOrder>?> GetPurchaseOrdersByFurnitureAsync(int furnitureId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"Purchase/by-furniture/{furnitureId}");
+                return await response.Content.ReadFromJsonAsync<List<PurchaseOrder>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"按商品查询采购订单失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 获取采购统计信息
+        public async Task<object?> GetPurchaseStatisticsAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Purchase/statistics");
+                return await response.Content.ReadFromJsonAsync<object>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取采购统计信息失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        #endregion
+
         #region Inventory 库存相关接口
 
         // 获取所有库存

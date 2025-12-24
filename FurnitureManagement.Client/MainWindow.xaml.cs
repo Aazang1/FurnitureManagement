@@ -157,8 +157,9 @@ namespace FurnitureManagement.Client
             
             // 隐藏所有内容页面
             HideAllContentGrids();
-            // 显示进货管理页面
-            PurchaseManageGrid.Visibility = Visibility.Visible;
+            // 显示采购管理页面
+            PurchaseManageFrame.Navigate(new PurchaseManagementPage());
+            PurchaseManageFrame.Visibility = Visibility.Visible;
         }
 
         // 销售管理按钮点击事件
@@ -269,7 +270,7 @@ namespace FurnitureManagement.Client
         {
             SystemOverviewGrid.Visibility = Visibility.Collapsed;
             InventoryManageFrame.Visibility = Visibility.Collapsed;
-            PurchaseManageGrid.Visibility = Visibility.Collapsed;
+            PurchaseManageFrame.Visibility = Visibility.Collapsed;
             SalesManageFrame.Visibility = Visibility.Collapsed;
             FinanceManageGrid.Visibility = Visibility.Collapsed;
             ReportManageGrid.Visibility = Visibility.Collapsed;
