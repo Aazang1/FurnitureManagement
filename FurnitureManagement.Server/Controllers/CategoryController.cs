@@ -20,7 +20,16 @@ namespace FurnitureManagement.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _context.Category.ToListAsync();
+            var categories = await _context.Category.ToListAsync();
+            
+            // 统计每个分类下的家具数量
+            foreach (var category in categories)
+            {
+                category.FurnitureCount = await _context.Furniture
+                    .CountAsync(f => f.CategoryId == category.CategoryId);
+            }
+            
+            return categories;
         }
 
         // GET: api/Category/5

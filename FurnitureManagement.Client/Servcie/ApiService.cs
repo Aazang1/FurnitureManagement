@@ -13,7 +13,10 @@ namespace FurnitureManagement.Client.Servcie
         {
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri(BaseUrl);
-            _httpClient.Timeout = TimeSpan.FromSeconds(30);
+            _httpClient.Timeout = TimeSpan.FromSeconds(60); // 增加超时时间
+            
+            // 添加默认请求头
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "FurnitureManagement-Client/1.0");
         }
 
         // 登录
@@ -164,6 +167,21 @@ namespace FurnitureManagement.Client.Servcie
             }
         }
 
+        // 修改密码
+        public async Task<ApiResponse?> ChangePasswordAsync(ChangePasswordRequest request)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("User/change-password", request);
+                return await response.Content.ReadFromJsonAsync<ApiResponse>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"修改密码失败: {ex.Message}");
+                return new ApiResponse { Success = false, Message = "网络请求失败" };
+            }
+        }
+
         #region Category 商品分类相关接口
 
         // 获取所有商品分类
@@ -270,6 +288,28 @@ namespace FurnitureManagement.Client.Servcie
             catch (Exception ex)
             {
                 Console.WriteLine($"获取商品列表失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 搜索商品
+        public async Task<List<Furniture>?> SearchFurnitureAsync(string? query = null, int? categoryId = null)
+        {
+            try
+            {
+                var queryParams = new List<string>();
+                if (!string.IsNullOrWhiteSpace(query))
+                    queryParams.Add($"query={Uri.EscapeDataString(query)}");
+                if (categoryId.HasValue && categoryId.Value > 0)
+                    queryParams.Add($"categoryId={categoryId.Value}");
+
+                var queryString = queryParams.Count > 0 ? "?" + string.Join("&", queryParams) : "";
+                var response = await _httpClient.GetAsync($"Furniture/search{queryString}");
+                return await response.Content.ReadFromJsonAsync<List<Furniture>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"搜索商品失败: {ex.Message}");
                 return null;
             }
         }
@@ -525,6 +565,22 @@ namespace FurnitureManagement.Client.Servcie
             }
         }
 
+        // 搜索供应商
+        public async Task<List<Supplier>?> SearchSuppliersAsync(string? query = null)
+        {
+            try
+            {
+                var queryString = !string.IsNullOrWhiteSpace(query) ? $"?query={Uri.EscapeDataString(query)}" : "";
+                var response = await _httpClient.GetAsync($"Supplier/search{queryString}");
+                return await response.Content.ReadFromJsonAsync<List<Supplier>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"搜索供应商失败: {ex.Message}");
+                return null;
+            }
+        }
+
         // 根据ID获取供应商
         public async Task<Supplier?> GetSupplierByIdAsync(int id)
         {
@@ -614,6 +670,22 @@ namespace FurnitureManagement.Client.Servcie
             catch (Exception ex)
             {
                 Console.WriteLine($"获取仓库列表失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 搜索仓库
+        public async Task<List<Warehouse>?> SearchWarehousesAsync(string? query = null)
+        {
+            try
+            {
+                var queryString = !string.IsNullOrWhiteSpace(query) ? $"?query={Uri.EscapeDataString(query)}" : "";
+                var response = await _httpClient.GetAsync($"Warehouse/search{queryString}");
+                return await response.Content.ReadFromJsonAsync<List<Warehouse>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"搜索仓库失败: {ex.Message}");
                 return null;
             }
         }

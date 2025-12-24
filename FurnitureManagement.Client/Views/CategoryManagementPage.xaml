@@ -72,6 +72,7 @@
                     <DataGridTextColumn Header="分类ID" Binding="{Binding CategoryId}" Width="80" IsReadOnly="True"/>
                     <DataGridTextColumn Header="分类名称" Binding="{Binding CategoryName}" Width="150" IsReadOnly="True"/>
                     <DataGridTextColumn Header="描述" Binding="{Binding Description}" Width="*" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="家具数量" Binding="{Binding FurnitureCount}" Width="100" IsReadOnly="True"/>
                     <DataGridTextColumn Header="创建时间" Binding="{Binding CreatedAt, StringFormat='yyyy-MM-dd HH:mm'}" Width="150" IsReadOnly="True"/>
                     <DataGridTextColumn Header="更新时间" Binding="{Binding UpdatedAt, StringFormat='yyyy-MM-dd HH:mm'}" Width="150" IsReadOnly="True"/>
                     <DataGridTemplateColumn Header="操作" Width="150" IsReadOnly="True">

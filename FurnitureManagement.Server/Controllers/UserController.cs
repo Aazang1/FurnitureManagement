@@ -200,6 +200,44 @@ namespace FurnitureManagement.Server.Controllers
             return Ok(new { Success = true, Message = "用户已禁用" });
         }
 
+        // POST: api/User/change-password
+        [HttpPost("change-password")]
+        public async Task<ActionResult<dynamic>> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            // 查找用户
+            var user = await _context.User.FindAsync(request.UserId);
+            if (user == null)
+            {
+                return NotFound(new { Success = false, Message = "用户不存在" });
+            }
+
+            // 验证原密码
+            if (!PasswordHelper.VerifyPassword(request.OldPassword, user.Password))
+            {
+                return Ok(new { Success = false, Message = "原密码错误" });
+            }
+
+            // 验证新密码不能与原密码相同
+            if (request.OldPassword == request.NewPassword)
+            {
+                return Ok(new { Success = false, Message = "新密码不能与原密码相同" });
+            }
+
+            // 验证新密码长度
+            if (request.NewPassword.Length < 6)
+            {
+                return Ok(new { Success = false, Message = "新密码长度不能少于6位" });
+            }
+
+            // 更新密码
+            user.Password = PasswordHelper.EncryptPassword(request.NewPassword);
+            user.UpdatedAt = DateTime.Now;
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Success = true, Message = "密码修改成功" });
+        }
+
         private bool UserExists(int id)
         {
             return _context.User.Any(e => e.UserId == id);

@@ -49,6 +49,15 @@ namespace FurnitureManagement.Client.Views
                     }
                     dgProducts.ItemsSource = _allProducts;
                 }
+
+                // 初始化分类筛选下拉框
+                if (_allCategories != null)
+                {
+                    var categoriesWithAll = new List<Category> { new Category { CategoryId = 0, CategoryName = "全部分类" } };
+                    categoriesWithAll.AddRange(_allCategories);
+                    cmbCategoryFilter.ItemsSource = categoriesWithAll;
+                    cmbCategoryFilter.SelectedIndex = 0; // 默认选择"全部分类"
+                }
             }
             catch (Exception ex)
             {
@@ -60,19 +69,55 @@ namespace FurnitureManagement.Client.Views
         // 搜索按钮点击事件
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
+            ApplyFilters();
+        }
+
+        // 实时搜索事件
+        private void txtSearch_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        // 分类筛选变更事件
+        private void cmbCategoryFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        // 清除筛选按钮点击事件
+        private void btnClearFilter_Click(object sender, RoutedEventArgs e)
+        {
+            txtSearch.Text = string.Empty;
+            cmbCategoryFilter.SelectedIndex = 0;
+            ApplyFilters();
+        }
+
+        // 应用搜索和筛选
+        private void ApplyFilters()
+        {
             if (_allProducts == null)
                 return;
 
+            var filteredProducts = _allProducts.AsEnumerable();
+
+            // 应用搜索筛选（按名称和型号）
             string searchText = txtSearch.Text.Trim().ToLower();
-            if (string.IsNullOrWhiteSpace(searchText))
+            if (!string.IsNullOrWhiteSpace(searchText))
             {
-                dgProducts.ItemsSource = _allProducts;
+                filteredProducts = filteredProducts.Where(p => 
+                    p.FurnitureName.ToLower().Contains(searchText) ||
+                    (!string.IsNullOrEmpty(p.Model) && p.Model.ToLower().Contains(searchText))
+                );
             }
-            else
+
+            // 应用分类筛选
+            if (cmbCategoryFilter.SelectedValue != null && (int)cmbCategoryFilter.SelectedValue != 0)
             {
-                var filteredProducts = _allProducts.Where(p => p.FurnitureName.ToLower().Contains(searchText)).ToList();
-                dgProducts.ItemsSource = filteredProducts;
+                int selectedCategoryId = (int)cmbCategoryFilter.SelectedValue;
+                filteredProducts = filteredProducts.Where(p => p.CategoryId == selectedCategoryId);
             }
+
+            dgProducts.ItemsSource = filteredProducts.ToList();
         }
 
         // 添加商品按钮点击事件

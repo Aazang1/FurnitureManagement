@@ -46,6 +46,7 @@ namespace FurnitureManagement.Client.Views
             {
                 txtFurnitureName.Text = _product.FurnitureName;
                 cmbCategory.SelectedValue = _product.CategoryId;
+                txtModel.Text = _product.Model ?? string.Empty;
                 txtPurchasePrice.Text = _product.PurchasePrice.ToString("F2");
                 txtSalePrice.Text = _product.SalePrice.ToString("F2");
                 txtDescription.Text = _product.Description ?? string.Empty;
@@ -68,6 +69,7 @@ namespace FurnitureManagement.Client.Views
                     // 更新商品
                     _product.FurnitureName = txtFurnitureName.Text.Trim();
                     _product.CategoryId = (int?)cmbCategory.SelectedValue;
+                    _product.Model = txtModel.Text.Trim();
                     _product.PurchasePrice = decimal.Parse(txtPurchasePrice.Text.Trim());
                     _product.SalePrice = decimal.Parse(txtSalePrice.Text.Trim());
                     _product.Description = txtDescription.Text.Trim();
@@ -91,6 +93,7 @@ namespace FurnitureManagement.Client.Views
                     {
                         FurnitureName = txtFurnitureName.Text.Trim(),
                         CategoryId = (int?)cmbCategory.SelectedValue,
+                        Model = txtModel.Text.Trim(),
                         PurchasePrice = decimal.Parse(txtPurchasePrice.Text.Trim()),
                         SalePrice = decimal.Parse(txtSalePrice.Text.Trim()),
                         Description = txtDescription.Text.Trim(),

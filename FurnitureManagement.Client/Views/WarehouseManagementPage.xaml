@@ -30,6 +30,105 @@
                 </Button>
             </Grid>
             
+            <!-- 搜索和筛选区域 -->
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- 搜索框 -->
+                <TextBox x:Name="txtSearch" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center" Grid.Column="0" 
+                         KeyUp="txtSearch_KeyUp" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="#3498DB"/>
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter Property="BorderBrush" Value="#3498DB"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                
+                <!-- 搜索按钮 -->
+                <Button Content="搜索" Width="80" Height="35" Background="#3498DB" Foreground="White" 
+                        BorderBrush="Transparent" Click="btnSearch_Click" Grid.Column="1" Margin="10,0,0,0">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#2980B9"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <!-- 清除筛选按钮 -->
+                <Button Content="清除筛选" Grid.Column="2" Width="80" Height="35" Background="#95A5A6" Foreground="White" 
+                        BorderBrush="Transparent" Click="btnClearFilter_Click" Margin="10,0,0,0">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#7F8C8D"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+            
+            <!-- 统计信息区域 -->
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- 总仓库数 -->
+                <Border Grid.Column="0" Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,10,0">
+                    <StackPanel>
+                        <TextBlock Text="总仓库数" FontSize="12" Foreground="#666666" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtTotalWarehouses" Text="0" FontSize="24" FontWeight="Bold" Foreground="#3498DB"/>
+                    </StackPanel>
+                </Border>
+                
+                <!-- 总容量 -->
+                <Border Grid.Column="1" Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,10,0">
+                    <StackPanel>
+                        <TextBlock Text="总容量" FontSize="12" Foreground="#666666" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtTotalCapacity" Text="0" FontSize="24" FontWeight="Bold" Foreground="#2ECC71"/>
+                    </StackPanel>
+                </Border>
+                
+                <!-- 平均容量 -->
+                <Border Grid.Column="2" Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,10,0">
+                    <StackPanel>
+                        <TextBlock Text="平均容量" FontSize="12" Foreground="#666666" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtAverageCapacity" Text="0" FontSize="24" FontWeight="Bold" Foreground="#F39C12"/>
+                    </StackPanel>
+                </Border>
+                
+                <!-- 搜索结果 -->
+                <Border Grid.Column="3" Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="搜索结果" FontSize="12" Foreground="#666666" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtSearchResults" Text="0" FontSize="24" FontWeight="Bold" Foreground="#9B59B6"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            
             <!-- 仓库列表 -->
             <DataGrid x:Name="dgWarehouses" AutoGenerateColumns="False" CanUserAddRows="False" 
                       SelectionMode="Single" SelectionUnit="FullRow" Background="White"

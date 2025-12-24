@@ -30,41 +30,90 @@
                 </Button>
             </Grid>
             
-            <!-- 搜索区域 -->
+            <!-- 搜索和筛选区域 -->
             <Grid Margin="0,0,0,20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="250"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBox x:Name="txtSearch" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center" Grid.Column="0">
-                    <TextBox.Style>
-                        <Style TargetType="TextBox">
-                            <Setter Property="BorderBrush" Value="#E0E0E0"/>
-                            <Setter Property="BorderThickness" Value="1"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="BorderBrush" Value="#3498DB"/>
-                                </Trigger>
-                                <Trigger Property="IsFocused" Value="True">
-                                    <Setter Property="BorderBrush" Value="#3498DB"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>
-                <Button Content="搜索" Width="80" Height="35" Background="#3498DB" Foreground="White" 
-                        BorderBrush="Transparent" Click="btnSearch_Click" Grid.Column="1" Margin="10,0,0,0">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#2980B9"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <!-- 搜索行 -->
+                <Grid Grid.Row="0" Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="txtSearch" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center" Grid.Column="0" 
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" KeyUp="txtSearch_KeyUp">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="BorderBrush" Value="#3498DB"/>
+                                    </Trigger>
+                                    <Trigger Property="IsFocused" Value="True">
+                                        <Setter Property="BorderBrush" Value="#3498DB"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    <Button Content="搜索" Width="80" Height="35" Background="#3498DB" Foreground="White" 
+                            BorderBrush="Transparent" Click="btnSearch_Click" Grid.Column="1" Margin="10,0,0,0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#2980B9"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+                
+                <!-- 筛选行 -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="分类筛选：" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Medium" Foreground="#333333"/>
+                    <ComboBox x:Name="cmbCategoryFilter" Grid.Column="1" Height="35" Padding="10" VerticalContentAlignment="Center" 
+                              SelectedValuePath="CategoryId" DisplayMemberPath="CategoryName" SelectionChanged="cmbCategoryFilter_SelectionChanged">
+                        <ComboBox.Style>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="BorderBrush" Value="#3498DB"/>
+                                    </Trigger>
+                                    <Trigger Property="IsFocused" Value="True">
+                                        <Setter Property="BorderBrush" Value="#3498DB"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
+                    <Button Content="清除筛选" Grid.Column="2" Width="80" Height="35" Background="#95A5A6" Foreground="White" 
+                            BorderBrush="Transparent" Click="btnClearFilter_Click" Margin="10,0,0,0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#7F8C8D"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
             </Grid>
             
             <!-- 商品列表 -->
@@ -107,7 +156,8 @@
                 <!-- 列定义 -->
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="商品ID" Binding="{Binding FurnitureId}" Width="80" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="商品名称" Binding="{Binding FurnitureName}" Width="150" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="商品名称" Binding="{Binding FurnitureName}" Width="120" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="型号" Binding="{Binding Model}" Width="100" IsReadOnly="True"/>
                     <DataGridTextColumn Header="分类" Binding="{Binding Category.CategoryName}" Width="100" IsReadOnly="True"/>
                     <DataGridTextColumn Header="进货价" Binding="{Binding PurchasePrice, StringFormat='¥{0:N2}'}" Width="100" IsReadOnly="True"/>
                     <DataGridTextColumn Header="销售价" Binding="{Binding SalePrice, StringFormat='¥{0:N2}'}" Width="100" IsReadOnly="True"/>

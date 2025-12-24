@@ -20,14 +20,43 @@ namespace FurnitureManagement.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Furniture>>> GetFurniture()
         {
-            return await _context.Furniture.ToListAsync();
+            return await _context.Furniture
+                .Include(f => f.Category)
+                .ToListAsync();
+        }
+
+        // GET: api/Furniture/search?query=xxx&categoryId=1
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Furniture>>> SearchFurniture([FromQuery] string? query, [FromQuery] int? categoryId)
+        {
+            var furnitureQuery = _context.Furniture.Include(f => f.Category).AsQueryable();
+
+            // Apply search filter (by name and model)
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                var searchTerm = query.ToLower();
+                furnitureQuery = furnitureQuery.Where(f => 
+                    f.FurnitureName.ToLower().Contains(searchTerm) ||
+                    (f.Model != null && f.Model.ToLower().Contains(searchTerm))
+                );
+            }
+
+            // Apply category filter
+            if (categoryId.HasValue && categoryId.Value > 0)
+            {
+                furnitureQuery = furnitureQuery.Where(f => f.CategoryId == categoryId.Value);
+            }
+
+            return await furnitureQuery.ToListAsync();
         }
 
         // GET: api/Furniture/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Furniture>> GetFurniture(int id)
         {
-            var furniture = await _context.Furniture.FindAsync(id);
+            var furniture = await _context.Furniture
+                .Include(f => f.Category)
+                .FirstOrDefaultAsync(f => f.FurnitureId == id);
 
             if (furniture == null)
             {

@@ -139,6 +139,16 @@ namespace FurnitureManagement.Client.Views
                 return false;
             }
 
+            // 验证容量输入
+            if (!string.IsNullOrWhiteSpace(txtCapacity.Text))
+            {
+                if (!int.TryParse(txtCapacity.Text.Trim(), out var capacity) || capacity < 0)
+                {
+                    ShowError("容量必须是非负整数");
+                    return false;
+                }
+            }
+
             return true;
         }
 

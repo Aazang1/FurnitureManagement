@@ -39,4 +39,12 @@ namespace FurnitureManagement.Server.Models
         [Column("last_login")]
         public DateTime? LastLogin { get; set; }
     }
+
+    // 修改密码请求模型
+    public class ChangePasswordRequest
+    {
+        public int UserId { get; set; }
+        public string OldPassword { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
+    }
 }

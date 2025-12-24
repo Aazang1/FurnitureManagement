@@ -29,5 +29,10 @@ namespace FurnitureManagement.Client.Models
         /// 更新时间
         /// </summary>
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// 该分类下的家具数量
+        /// </summary>
+        public int FurnitureCount { get; set; }
     }
 }

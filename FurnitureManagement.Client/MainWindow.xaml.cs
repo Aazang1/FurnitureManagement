@@ -4,6 +4,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using FurnitureManagement.Client.Models;
 using FurnitureManagement.Client.Servcie;
+using FurnitureManagement.Client.Services;
 using FurnitureManagement.Client.Views;
 
 namespace FurnitureManagement.Client
@@ -14,15 +15,14 @@ namespace FurnitureManagement.Client
     public partial class MainWindow : Window
     {
         private readonly ApiService _apiService;
-        private User _currentUser;
         private List<User>? _allUsers;
 
-        public MainWindow(User user)
+        public MainWindow()
         {
             InitializeComponent();
             _apiService = new ApiService();
-            _currentUser = user;
             InitializeUserInfo();
+            ApplyRoleBasedPermissions();
             // 初始化时只显示系统概览，不加载用户列表
             ShowSystemOverview();
         }
@@ -30,8 +30,45 @@ namespace FurnitureManagement.Client
         // 初始化用户信息
         private void InitializeUserInfo()
         {
-            txtUserName.Text = _currentUser.RealName;
-            txtUserRole.Text = _currentUser.Role;
+            if (UserSession.CurrentUser != null)
+            {
+                txtUserName.Text = UserSession.CurrentUser.RealName;
+                txtUserRole.Text = UserSession.CurrentUser.Role;
+            }
+        }
+
+        // 应用基于角色的权限控制
+        private void ApplyRoleBasedPermissions()
+        {
+            if (!UserSession.IsLoggedIn)
+            {
+                return;
+            }
+
+            // 根据角色控制功能访问权限
+            // Admin - 拥有所有权限
+            // Manager - 拥有大部分管理权限，但不能管理用户
+            // User - 只能查看，不能管理
+
+            if (UserSession.IsUser)
+            {
+                // 普通用户：隐藏所有管理功能，只能查看
+                btnInventoryManage.Visibility = Visibility.Collapsed;
+                btnPurchaseManage.Visibility = Visibility.Collapsed;
+                btnSalesManage.Visibility = Visibility.Collapsed;
+                btnFinanceManage.Visibility = Visibility.Collapsed;
+                btnReportManage.Visibility = Visibility.Collapsed;
+                btnProductManage.Visibility = Visibility.Collapsed;
+                btnSupplierManage.Visibility = Visibility.Collapsed;
+                btnWarehouseManage.Visibility = Visibility.Collapsed;
+                btnUserManage.Visibility = Visibility.Collapsed;
+            }
+            else if (UserSession.IsManager)
+            {
+                // 经理：有管理权限，但不能管理用户
+                btnUserManage.Visibility = Visibility.Collapsed;
+            }
+            // Admin 拥有所有权限，不需要隐藏任何功能
         }
 
         // 显示系统概览
@@ -41,7 +78,7 @@ namespace FurnitureManagement.Client
             ResetNavButtonStyles();
             // 设置系统概览按钮为激活状态
             SetActiveNavButton(btnSystemOverview);
-            
+
             // 隐藏所有内容页面
             HideAllContentGrids();
             // 显示系统概览页面
@@ -51,16 +88,23 @@ namespace FurnitureManagement.Client
         // 显示用户管理
         private void ShowUserManagement()
         {
+            // 检查权限：只有管理员可以管理用户
+            if (!UserSession.IsAdmin)
+            {
+                MessageBox.Show("您没有权限访问此功能，仅管理员可以管理用户。", "权限不足", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             // 重置所有导航按钮样式
             ResetNavButtonStyles();
             // 设置用户管理按钮为激活状态
             SetActiveNavButton(btnUserManage);
-            
+
             // 隐藏所有内容页面
             HideAllContentGrids();
             // 显示用户管理页面
             UserManageGrid.Visibility = Visibility.Visible;
-            
+
             // 加载用户列表
             LoadUsersAsync();
         }
@@ -70,7 +114,7 @@ namespace FurnitureManagement.Client
         {
             // 创建默认背景色
             var defaultBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#34495E"));
-            
+
             // 设置所有按钮的背景为默认值
             btnSystemOverview.Background = defaultBackground;
             btnInventoryManage.Background = defaultBackground;
@@ -83,8 +127,6 @@ namespace FurnitureManagement.Client
             btnWarehouseManage.Background = defaultBackground;
             btnUserManage.Background = defaultBackground;
         }
-
-
 
         // 加载用户列表
         private async void LoadUsersAsync()
@@ -108,6 +150,8 @@ namespace FurnitureManagement.Client
             var result = MessageBox.Show("确定要退出登录吗？", "确认", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
+                // 清除会话信息
+                UserSession.Clear();
                 // 关闭当前窗口，打开登录窗口
                 var loginWindow = new LoginWindow();
                 loginWindow.Show();
@@ -128,7 +172,7 @@ namespace FurnitureManagement.Client
             ResetNavButtonStyles();
             // 设置当前按钮为激活状态
             SetActiveNavButton(btnInventoryManage);
-            
+
             // 隐藏所有内容页面
             HideAllContentGrids();
             // 显示库存管理页面
@@ -143,7 +187,7 @@ namespace FurnitureManagement.Client
             ResetNavButtonStyles();
             // 设置当前按钮为激活状态
             SetActiveNavButton(btnPurchaseManage);
-            
+
             // 隐藏所有内容页面
             HideAllContentGrids();
             // 显示进货管理页面
@@ -157,7 +201,7 @@ namespace FurnitureManagement.Client
             ResetNavButtonStyles();
             // 设置当前按钮为激活状态
             SetActiveNavButton(btnSalesManage);
-            
+
             // 隐藏所有内容页面
             HideAllContentGrids();
             // 显示销售管理页面
@@ -171,7 +215,7 @@ namespace FurnitureManagement.Client
             ResetNavButtonStyles();
             // 设置当前按钮为激活状态
             SetActiveNavButton(btnFinanceManage);
-            
+
             // 隐藏所有内容页面
             HideAllContentGrids();
             // 显示资金管理页面
@@ -185,7 +229,7 @@ namespace FurnitureManagement.Client
             ResetNavButtonStyles();
             // 设置当前按钮为激活状态
             SetActiveNavButton(btnReportManage);
-            
+
             // 隐藏所有内容页面
             HideAllContentGrids();
             // 显示统计报表页面
@@ -199,11 +243,11 @@ namespace FurnitureManagement.Client
             ResetNavButtonStyles();
             // 设置当前按钮为激活状态
             SetActiveNavButton(btnProductManage);
-            
+
             // 隐藏所有内容页面
             HideAllContentGrids();
             // 显示商品管理页面，传入当前用户ID
-            ProductManageFrame.Navigate(new ProductManagementPage(_currentUser.UserId));
+            ProductManageFrame.Navigate(new ProductManagementPage(UserSession.CurrentUser?.UserId ?? 0));
             ProductManageFrame.Visibility = Visibility.Visible;
         }
 
@@ -214,7 +258,7 @@ namespace FurnitureManagement.Client
             ResetNavButtonStyles();
             // 设置当前按钮为激活状态
             SetActiveNavButton(btnSupplierManage);
-            
+
             // 隐藏所有内容页面
             HideAllContentGrids();
             // 显示供应商管理页面
@@ -229,14 +273,14 @@ namespace FurnitureManagement.Client
             ResetNavButtonStyles();
             // 设置当前按钮为激活状态
             SetActiveNavButton(btnWarehouseManage);
-            
+
             // 隐藏所有内容页面
             HideAllContentGrids();
             // 显示仓库管理页面
             WarehouseManageFrame.Navigate(new WarehouseManagementPage());
             WarehouseManageFrame.Visibility = Visibility.Visible;
         }
-        
+
         // 隐藏所有内容网格
         private void HideAllContentGrids()
         {
@@ -261,6 +305,13 @@ namespace FurnitureManagement.Client
         // 添加用户按钮点击事件
         private void btnAddUser_Click(object sender, RoutedEventArgs e)
         {
+            // 检查权限
+            if (!UserSession.IsAdmin)
+            {
+                MessageBox.Show("您没有权限添加用户。", "权限不足", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             // 打开用户编辑窗口（新建用户）
             var editWindow = new UserEditWindow(null);
             if (editWindow.ShowDialog() == true)
@@ -283,8 +334,8 @@ namespace FurnitureManagement.Client
             }
             else
             {
-                var filteredUsers = _allUsers.Where(u => 
-                    u.Username.ToLower().Contains(searchText) || 
+                var filteredUsers = _allUsers.Where(u =>
+                    u.Username.ToLower().Contains(searchText) ||
                     u.Email?.ToLower().Contains(searchText) == true ||
                     u.RealName.ToLower().Contains(searchText)
                 ).ToList();
@@ -295,6 +346,13 @@ namespace FurnitureManagement.Client
         // 编辑用户按钮点击事件
         private void btnEditUser_Click(object sender, RoutedEventArgs e)
         {
+            // 检查权限
+            if (!UserSession.IsAdmin)
+            {
+                MessageBox.Show("您没有权限编辑用户。", "权限不足", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             // 获取选中的用户
             var button = sender as Button;
             var user = button?.Tag as User;
@@ -313,10 +371,24 @@ namespace FurnitureManagement.Client
         // 删除用户按钮点击事件
         private async void btnDeleteUser_Click(object sender, RoutedEventArgs e)
         {
+            // 检查权限
+            if (!UserSession.IsAdmin)
+            {
+                MessageBox.Show("您没有权限删除用户。", "权限不足", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             var button = sender as Button;
             var user = button?.Tag as User;
             if (user != null)
             {
+                // 防止删除自己
+                if (user.UserId == UserSession.CurrentUser?.UserId)
+                {
+                    MessageBox.Show("不能删除当前登录的用户。", "操作失败", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 // 显示确认对话框
                 var result = MessageBox.Show($"确定要删除用户 {user.Username} 吗？", "确认删除", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
@@ -346,13 +418,26 @@ namespace FurnitureManagement.Client
         // 切换用户状态按钮点击事件
         private async void btnToggleStatus_Click(object sender, RoutedEventArgs e)
         {
+            // 检查权限
+            if (!UserSession.IsAdmin)
+            {
+                MessageBox.Show("您没有权限修改用户状态。", "权限不足", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             var button = sender as Button;
             var user = button?.Tag as User;
             if (user != null)
             {
+                // 防止禁用自己
+                if (user.UserId == UserSession.CurrentUser?.UserId)
+                {
+                    MessageBox.Show("不能修改当前登录用户的状态。", "操作失败", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
                 try
                 {
-                    var response = user.Status == "active" 
+                    var response = user.Status == "active"
                         ? await _apiService.DeactivateUserAsync(user.UserId)
                         : await _apiService.ActivateUserAsync(user.UserId);
 
@@ -381,6 +466,13 @@ namespace FurnitureManagement.Client
             {
                 button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2C3E50"));
             }
+        }
+
+        // 修改密码按钮点击事件
+        private void btnChangePassword_Click(object sender, RoutedEventArgs e)
+        {
+            var changePasswordWindow = new ChangePasswordWindow();
+            changePasswordWindow.ShowDialog();
         }
     }
 

@@ -41,7 +41,7 @@
                     
                     <!-- 联系人 -->
                     <StackPanel Margin="0,0,0,15">
-                        <TextBlock Text="联系人 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBlock Text="联系人" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
                         <TextBox x:Name="txtContactPerson" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
@@ -62,29 +62,8 @@
                     
                     <!-- 电话 -->
                     <StackPanel Margin="0,0,0,15">
-                        <TextBlock Text="电话 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBlock Text="电话" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
                         <TextBox x:Name="txtPhone" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
-                            <TextBox.Style>
-                                <Style TargetType="TextBox">
-                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
-                                    <Setter Property="BorderThickness" Value="1"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="BorderBrush" Value="#3498DB"/>
-                                        </Trigger>
-                                        <Trigger Property="IsFocused" Value="True">
-                                            <Setter Property="BorderBrush" Value="#3498DB"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
-                    </StackPanel>
-                    
-                    <!-- 邮箱 -->
-                    <StackPanel Margin="0,0,0,15">
-                        <TextBlock Text="邮箱 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
-                        <TextBox x:Name="txtEmail" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="BorderBrush" Value="#E0E0E0"/>
@@ -104,7 +83,7 @@
                     
                     <!-- 地址 -->
                     <StackPanel Margin="0,0,0,20">
-                        <TextBlock Text="地址 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBlock Text="地址" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
                         <TextBox x:Name="txtAddress" Width="Auto" Height="80" Padding="10" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">

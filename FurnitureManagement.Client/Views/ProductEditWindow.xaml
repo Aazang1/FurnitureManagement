@@ -60,6 +60,27 @@
                         </ComboBox>
                     </StackPanel>
                     
+                    <!-- 型号 -->
+                    <StackPanel Margin="0,0,0,15">
+                        <TextBlock Text="型号" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <TextBox x:Name="txtModel" Width="Auto" Height="35" Padding="10" VerticalContentAlignment="Center">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter Property="BorderBrush" Value="#3498DB"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </StackPanel>
+                    
                     <!-- 进货价格 -->
                     <StackPanel Margin="0,0,0,15">
                         <TextBlock Text="进货价格 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>

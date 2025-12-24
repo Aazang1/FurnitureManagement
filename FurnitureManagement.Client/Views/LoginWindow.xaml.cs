@@ -1,6 +1,7 @@
 using System.Windows;
 using FurnitureManagement.Client.Models;
 using FurnitureManagement.Client.Servcie;
+using FurnitureManagement.Client.Services;
 
 namespace FurnitureManagement.Client.Views
 {
@@ -46,9 +47,10 @@ namespace FurnitureManagement.Client.Views
                 {
                     if (response.Success && response.User != null)
                     {
-                        // 登录成功，打开主窗口
+                        // 登录成功，设置会话并打开主窗口
                         Console.WriteLine("登录成功，准备打开主窗口...");
-                        var mainWindow = new MainWindow(response.User);
+                        UserSession.CurrentUser = response.User;
+                        var mainWindow = new MainWindow();
                         mainWindow.Show();
                         this.Close();
                     }

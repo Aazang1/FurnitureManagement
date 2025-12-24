@@ -43,10 +43,9 @@ namespace FurnitureManagement.Client.Views
             if (_supplier != null)
             {
                 txtSupplierName.Text = _supplier.SupplierName;
-                txtContactPerson.Text = _supplier.ContactPerson;
-                txtPhone.Text = _supplier.Phone;
-                txtEmail.Text = _supplier.Email;
-                txtAddress.Text = _supplier.Address;
+                txtContactPerson.Text = _supplier.ContactPerson ?? string.Empty;
+                txtPhone.Text = _supplier.Phone ?? string.Empty;
+                txtAddress.Text = _supplier.Address ?? string.Empty;
             }
         }
 
@@ -73,12 +72,10 @@ namespace FurnitureManagement.Client.Views
                     var newSupplier = new Supplier
                     {
                         SupplierName = txtSupplierName.Text.Trim(),
-                        ContactPerson = txtContactPerson.Text.Trim(),
-                        Phone = txtPhone.Text.Trim(),
-                        Email = txtEmail.Text.Trim(),
-                        Address = txtAddress.Text.Trim(),
-                        CreatedAt = DateTime.Now,
-                        UpdatedAt = DateTime.Now
+                        ContactPerson = string.IsNullOrWhiteSpace(txtContactPerson.Text) ? null : txtContactPerson.Text.Trim(),
+                        Phone = string.IsNullOrWhiteSpace(txtPhone.Text) ? null : txtPhone.Text.Trim(),
+                        Address = string.IsNullOrWhiteSpace(txtAddress.Text) ? null : txtAddress.Text.Trim(),
+                        CreatedAt = DateTime.Now
                     };
 
                     var result = await _apiService.CreateSupplierAsync(newSupplier);
@@ -102,12 +99,10 @@ namespace FurnitureManagement.Client.Views
                         {
                             SupplierId = _supplier.SupplierId,
                             SupplierName = txtSupplierName.Text.Trim(),
-                            ContactPerson = txtContactPerson.Text.Trim(),
-                            Phone = txtPhone.Text.Trim(),
-                            Email = txtEmail.Text.Trim(),
-                            Address = txtAddress.Text.Trim(),
-                            CreatedAt = _supplier.CreatedAt,
-                            UpdatedAt = DateTime.Now
+                            ContactPerson = string.IsNullOrWhiteSpace(txtContactPerson.Text) ? null : txtContactPerson.Text.Trim(),
+                            Phone = string.IsNullOrWhiteSpace(txtPhone.Text) ? null : txtPhone.Text.Trim(),
+                            Address = string.IsNullOrWhiteSpace(txtAddress.Text) ? null : txtAddress.Text.Trim(),
+                            CreatedAt = _supplier.CreatedAt
                         };
 
                         var response = await _apiService.UpdateSupplierAsync(_supplier.SupplierId, updatedSupplier);
@@ -144,30 +139,7 @@ namespace FurnitureManagement.Client.Views
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtContactPerson.Text))
-            {
-                ShowError("请输入联系人");
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtPhone.Text))
-            {
-                ShowError("请输入电话");
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtEmail.Text))
-            {
-                ShowError("请输入邮箱");
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtAddress.Text))
-            {
-                ShowError("请输入地址");
-                return false;
-            }
-
+            // 其他字段为可选项，不需要强制验证
             return true;
         }
 

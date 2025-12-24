@@ -23,6 +23,26 @@ namespace FurnitureManagement.Server.Controllers
             return await _context.Supplier.ToListAsync();
         }
 
+        // GET: api/Supplier/search?query=xxx
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Supplier>>> SearchSuppliers([FromQuery] string? query)
+        {
+            var supplierQuery = _context.Supplier.AsQueryable();
+
+            // Apply search filter (by name, contact person, phone)
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                var searchTerm = query.ToLower();
+                supplierQuery = supplierQuery.Where(s => 
+                    s.SupplierName.ToLower().Contains(searchTerm) ||
+                    (s.ContactPerson != null && s.ContactPerson.ToLower().Contains(searchTerm)) ||
+                    (s.Phone != null && s.Phone.ToLower().Contains(searchTerm))
+                );
+            }
+
+            return await supplierQuery.ToListAsync();
+        }
+
         // GET: api/Supplier/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Supplier>> GetSupplier(int id)

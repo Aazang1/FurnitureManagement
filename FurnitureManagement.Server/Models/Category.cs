@@ -20,5 +20,9 @@ namespace FurnitureManagement.Server.Models
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        // 家具数量（不映射到数据库）
+        [NotMapped]
+        public int FurnitureCount { get; set; }
     }
 }
