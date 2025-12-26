@@ -19,6 +19,7 @@ namespace FurnitureManagement.Server.Data
         public DbSet<PurchaseDetail> PurchaseDetail { get; set; }
         public DbSet<SaleOrder> SaleOrder { get; set; }
         public DbSet<SaleDetail> SaleDetail { get; set; }
+        public DbSet<CapitalFlow> CapitalFlow { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -79,6 +80,31 @@ namespace FurnitureManagement.Server.Data
                 .WithOne(sd => sd.SaleOrder)
                 .HasForeignKey(sd => sd.SaleId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // 配置CapitalFlow表
+            modelBuilder.Entity<CapitalFlow>().ToTable("capital_flow");
+            modelBuilder.Entity<CapitalFlow>().HasKey(cf => cf.FlowId);
+            modelBuilder.Entity<CapitalFlow>().HasIndex(cf => cf.FlowDate).HasDatabaseName("idx_flow_date");
+            
+            // 配置属性与数据库字段的映射
+            modelBuilder.Entity<CapitalFlow>()
+                .Property(cf => cf.FlowId).HasColumnName("flow_id");
+            modelBuilder.Entity<CapitalFlow>()
+                .Property(cf => cf.FlowDate).HasColumnName("flow_date");
+            modelBuilder.Entity<CapitalFlow>()
+                .Property(cf => cf.FlowType).HasColumnName("flow_type");
+            modelBuilder.Entity<CapitalFlow>()
+                .Property(cf => cf.Amount).HasColumnName("amount");
+            modelBuilder.Entity<CapitalFlow>()
+                .Property(cf => cf.Description).HasColumnName("description");
+            modelBuilder.Entity<CapitalFlow>()
+                .Property(cf => cf.ReferenceType).HasColumnName("reference_type");
+            modelBuilder.Entity<CapitalFlow>()
+                .Property(cf => cf.ReferenceId).HasColumnName("reference_id");
+            modelBuilder.Entity<CapitalFlow>()
+                .Property(cf => cf.CreatedBy).HasColumnName("created_by");
+            modelBuilder.Entity<CapitalFlow>()
+                .Property(cf => cf.CreatedAt).HasColumnName("created_at");
         }
     }
 }
