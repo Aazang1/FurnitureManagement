@@ -1,25 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using FurnitureManagement.Client.Models;
 using FurnitureManagement.Client.Servcie;
 
 namespace FurnitureManagement.Client.Views
 {
-    /// <summary>
-    /// PurchaseManagementPage.xaml 的交互逻辑
-    /// </summary>
     public partial class PurchaseManagementPage : Page
     {
         private readonly ApiService _apiService;
@@ -117,6 +107,18 @@ namespace FurnitureManagement.Client.Views
         {
             if (sender is Button button && button.Tag is PurchaseOrder order)
             {
+                // 检查订单状态是否为"待处理"
+                if (order.Status == "completed")
+                {
+                    MessageBox.Show("此订单已完成，无需重复操作", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+                else if (order.Status == "cancelled")
+                {
+                    MessageBox.Show("此订单已取消，无法完成", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
                 var result = MessageBox.Show($"确定要完成采购订单 {order.PurchaseOrderId} 吗？", "确认", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
@@ -139,6 +141,18 @@ namespace FurnitureManagement.Client.Views
         {
             if (sender is Button button && button.Tag is PurchaseOrder order)
             {
+                // 检查订单状态
+                if (order.Status == "completed")
+                {
+                    MessageBox.Show("此订单已完成，无法取消", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+                else if (order.Status == "cancelled")
+                {
+                    MessageBox.Show("此订单已取消，无需重复操作", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
                 var result = MessageBox.Show($"确定要取消采购订单 {order.PurchaseOrderId} 吗？", "确认", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
@@ -187,7 +201,9 @@ namespace FurnitureManagement.Client.Views
         // 综合筛选方法
         private async void FilterPurchaseOrders()
         {
-            IEnumerable<PurchaseOrder> filteredOrders = _purchaseOrders ?? new List<PurchaseOrder>();
+            if (_purchaseOrders == null) return;
+
+            IEnumerable<PurchaseOrder> filteredOrders = _purchaseOrders;
 
             // 按日期筛选
             if (dpFromDate.SelectedDate.HasValue)
@@ -232,10 +248,12 @@ namespace FurnitureManagement.Client.Views
         // 按供应商筛选
         private async Task FilterPurchaseOrdersBySupplierAsync()
         {
+            if (_purchaseOrders == null) return;
+
             if (cmbSupplier.SelectedValue is not null && cmbSupplier.SelectedValue.ToString() is string strValue &&
                 int.TryParse(strValue, out int supplierId))
             {
-                IEnumerable<PurchaseOrder> filteredOrders = _purchaseOrders ?? new List<PurchaseOrder>();
+                IEnumerable<PurchaseOrder> filteredOrders = _purchaseOrders;
 
                 if (supplierId == 0) // 所有供应商
                 {
@@ -265,6 +283,8 @@ namespace FurnitureManagement.Client.Views
         // 按商品筛选
         private async Task FilterPurchaseOrdersByFurnitureAsync()
         {
+            if (_purchaseOrders == null) return;
+
             if (cmbFurniture.SelectedValue is not null && cmbFurniture.SelectedValue.ToString() is string strValue &&
                 int.TryParse(strValue, out int furnitureId))
             {
@@ -279,7 +299,7 @@ namespace FurnitureManagement.Client.Views
                     if (orders != null)
                     {
                         var orderIds = orders.Select(o => o.PurchaseOrderId).ToList();
-                        var filteredOrders = _purchaseOrders?.Where(po => orderIds.Contains(po.PurchaseOrderId)).ToList() ?? new List<PurchaseOrder>();
+                        var filteredOrders = _purchaseOrders.Where(po => orderIds.Contains(po.PurchaseOrderId)).ToList();
 
                         // 再按日期筛选
                         if (dpFromDate.SelectedDate.HasValue)
@@ -300,7 +320,7 @@ namespace FurnitureManagement.Client.Views
 
         private void dgPurchaseOrders_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            // 可以添加行选择逻辑
         }
     }
 }

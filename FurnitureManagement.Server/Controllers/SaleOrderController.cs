@@ -95,6 +95,22 @@ namespace FurnitureManagement.Server.Controllers
             _context.SaleOrder.Add(saleOrder);
             await _context.SaveChangesAsync();
 
+            // 创建资金流水记录
+            var capitalFlow = new CapitalFlow
+            {
+                FlowDate = saleOrder.SaleDate,
+                FlowType = "income",
+                Amount = saleOrder.FinalAmount,
+                Description = $"销售订单 #{saleOrder.SaleId} 收入",
+                ReferenceType = "sale",
+                ReferenceId = saleOrder.SaleId,
+                CreatedBy = saleOrder.CreatedBy ?? 1, // 默认使用创建订单的用户ID，如果没有则使用1
+                CreatedAt = DateTime.Now
+            };
+
+            _context.CapitalFlow.Add(capitalFlow);
+            await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetSaleOrder), new { id = saleOrder.SaleId }, saleOrder);
         }
 

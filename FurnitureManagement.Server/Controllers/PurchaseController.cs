@@ -58,6 +58,8 @@ namespace FurnitureManagement.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<PurchaseOrder>> CreatePurchaseOrder(PurchaseOrder purchaseOrder)
         {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
             try
             {
                 // 1. 暂时硬编码默认用户ID为1
@@ -135,6 +137,14 @@ namespace FurnitureManagement.Server.Controllers
                         }
                     }
                 }
+                else
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "采购明细不能为空"
+                    });
+                }
 
                 // 6. 设置默认状态
                 if (string.IsNullOrEmpty(purchaseOrder.Status))
@@ -146,16 +156,41 @@ namespace FurnitureManagement.Server.Controllers
                 _context.PurchaseOrder.Add(purchaseOrder);
                 await _context.SaveChangesAsync();
 
-                // 8. 返回成功响应
+                // 8. 创建资金流水记录
+                var capitalFlow = new CapitalFlow
+                {
+                    FlowDate = purchaseOrder.CreatedAt,
+                    FlowType = "expense", // 采购是支出
+                    Amount = purchaseOrder.TotalAmount * -1, // 负数表示支出
+                    Description = $"采购订单 #{purchaseOrder.PurchaseOrderId} 支出",
+                    ReferenceType = "purchase",
+                    ReferenceId = purchaseOrder.PurchaseOrderId,
+                    CreatedBy = purchaseOrder.CreatedBy,
+                    CreatedAt = DateTime.Now
+                };
+
+                _context.CapitalFlow.Add(capitalFlow);
+                await _context.SaveChangesAsync();
+
+                // 提交事务
+                await transaction.CommitAsync();
+
+                // 9. 返回成功响应
                 return Ok(new
                 {
                     success = true,
                     message = "采购订单创建成功",
-                    data = purchaseOrder
+                    data = new
+                    {
+                        purchaseOrder = purchaseOrder,
+                        capitalFlow = capitalFlow
+                    }
                 });
             }
             catch (DbUpdateException ex) when (ex.InnerException is MySqlConnector.MySqlException mysqlEx)
             {
+                await transaction.RollbackAsync();
+
                 if (mysqlEx.Message.Contains("foreign key constraint"))
                 {
                     return BadRequest(new
@@ -169,12 +204,13 @@ namespace FurnitureManagement.Server.Controllers
                     return BadRequest(new
                     {
                         success = false,
-                        message = "数据库操作失败"
+                        message = "数据库操作失败: " + mysqlEx.Message
                     });
                 }
             }
             catch (Exception ex)
             {
+                await transaction.RollbackAsync();
                 return BadRequest(new
                 {
                     success = false,

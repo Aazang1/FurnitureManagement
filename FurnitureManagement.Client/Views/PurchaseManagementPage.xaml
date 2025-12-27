@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:FurnitureManagement.Client.Views"
       xmlns:models="clr-namespace:FurnitureManagement.Client.Models"
+      xmlns:converters="clr-namespace:FurnitureManagement.Client.Converters"
       mc:Ignorable="d"
       d:DesignHeight="800"
       d:DesignWidth="1000"
@@ -12,6 +13,11 @@
       Background="#F5F5F5">
 
     <Grid>
+        <!-- 添加转换器资源 -->
+        <Grid.Resources>
+            <converters:StatusToChineseConverter x:Key="StatusConverter"/>
+        </Grid.Resources>
+
         <!-- 顶部标题栏 -->
         <Border Background="White" Height="60" VerticalAlignment="Top" BorderThickness="0,0,0,1" BorderBrush="#E0E0E0">
             <Grid>
@@ -223,7 +229,7 @@
                       Background="White" BorderBrush="#E0E0E0" BorderThickness="1" 
                       RowHeight="45" AlternatingRowBackground="#F9F9F9"
                       GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#E0E0E0"
-                      Grid.Row="1">
+                      Grid.Row="1" SelectionChanged="dgPurchaseOrders_SelectionChanged">
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="#F5F5F5"/>
@@ -287,7 +293,11 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="状态" Binding="{Binding Status}" Width="100" IsReadOnly="True">
+                    <!-- 修改状态列，使用转换器 -->
+                    <DataGridTextColumn Header="状态" 
+                                        Binding="{Binding Status, Converter={StaticResource StatusConverter}}" 
+                                        Width="100" 
+                                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
