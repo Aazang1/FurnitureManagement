@@ -1114,5 +1114,63 @@ namespace FurnitureManagement.Client.Servcie
         }
 
         #endregion
+
+        #region Report 报表相关接口
+
+        /// <summary>
+        /// 获取库存管理报表
+        /// </summary>
+        /// <returns>库存汇总数据</returns>
+        public async Task<List<InventorySummary>?> GetInventorySummaryAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Report/inventory-summary");
+                return await response.Content.ReadFromJsonAsync<List<InventorySummary>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取库存管理报表失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取销售日报
+        /// </summary>
+        /// <returns>销售日报数据</returns>
+        public async Task<List<SalesDaily>?> GetSalesDailyAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Report/sales-daily");
+                return await response.Content.ReadFromJsonAsync<List<SalesDaily>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取销售日报失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取人员操作报表
+        /// </summary>
+        /// <returns>人员操作数据</returns>
+        public async Task<List<UserOperations>?> GetUserOperationsAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Report/user-operations");
+                return await response.Content.ReadFromJsonAsync<List<UserOperations>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取人员操作报表失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        #endregion
     }
 }

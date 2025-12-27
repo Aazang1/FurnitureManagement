@@ -19,6 +19,11 @@ namespace FurnitureManagement.Server.Data
         public DbSet<PurchaseDetail> PurchaseDetail { get; set; }
         public DbSet<SaleOrder> SaleOrder { get; set; }
         public DbSet<SaleDetail> SaleDetail { get; set; }
+        
+        // 报表视图
+        public DbSet<InventorySummary> InventorySummary { get; set; }
+        public DbSet<SalesDaily> SalesDaily { get; set; }
+        public DbSet<UserOperations> UserOperations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -79,6 +84,11 @@ namespace FurnitureManagement.Server.Data
                 .WithOne(sd => sd.SaleOrder)
                 .HasForeignKey(sd => sd.SaleId)
                 .OnDelete(DeleteBehavior.Cascade);
+            
+            // 配置报表视图映射
+            modelBuilder.Entity<InventorySummary>().ToView("v_inventory_summary");
+            modelBuilder.Entity<SalesDaily>().ToView("v_sales_daily");
+            modelBuilder.Entity<UserOperations>().ToView("v_user_operations");
         }
     }
 }

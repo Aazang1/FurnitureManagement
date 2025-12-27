@@ -322,12 +322,7 @@
             </Grid>
             
             <!-- 统计报表内容区域 -->
-            <Grid x:Name="ReportManageGrid" Visibility="Collapsed">
-                <StackPanel Margin="20,20,20,20" Background="White">
-                    <TextBlock Text="统计报表" FontSize="24" FontWeight="Bold" Margin="20,20,0,30" Foreground="#333333"/>
-                    <TextBlock Text="统计报表功能正在开发中..." FontSize="16" Margin="20,0,0,0" Foreground="#666666"/>
-                </StackPanel>
-            </Grid>
+            <Frame x:Name="ReportManageFrame" Visibility="Collapsed" NavigationUIVisibility="Hidden"/>
             
             <!-- 商品管理内容区域 -->
             <Frame x:Name="ProductManageFrame" Visibility="Collapsed" NavigationUIVisibility="Hidden"/>
