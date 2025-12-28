@@ -4,7 +4,7 @@ echo 启动家具管理系统服务端
 echo ===================================
 echo.
 
-cd /d "d:\15\guanli\FurnitureManagement.Server"
+cd /d "d:\15\16\FurnitureManagement.Server"
 
 echo 正在启动服务端...
 echo 服务端将运行在: http://localhost:5192

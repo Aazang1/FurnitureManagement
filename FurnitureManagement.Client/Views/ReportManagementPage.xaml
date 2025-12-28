@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:FurnitureManagement.Client.Views"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="统计报表">
@@ -32,6 +33,29 @@
                                 </Button.Style>
                             </Button>
                         </StackPanel>
+                        
+                        <!-- 图表区域 -->
+                        <Border Margin="0,0,0,20" Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="300"/>
+                                </Grid.RowDefinitions>
+                                
+                                <TextBlock Text="库存数量分布" FontSize="16" FontWeight="Bold" Foreground="#333333" 
+                                           Margin="15,10,0,10"/>
+                                
+                                <lvc:CartesianChart Grid.Row="1" Margin="10" Series="{Binding InventoryChartSeries}" Height="280"
+                                                    LegendLocation="Bottom">
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Title="商品名称" FontSize="12"/>
+                                    </lvc:CartesianChart.AxisX>
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis Title="库存数量" FontSize="12"/>
+                                    </lvc:CartesianChart.AxisY>
+                                </lvc:CartesianChart>
+                            </Grid>
+                        </Border>
                         
                         <!-- 库存管理报表数据网格 -->
                         <DataGrid x:Name="dgInventorySummary" AutoGenerateColumns="False" CanUserAddRows="False" 
@@ -104,6 +128,29 @@
                                 </Button.Style>
                             </Button>
                         </StackPanel>
+                        
+                        <!-- 图表区域 -->
+                        <Border Margin="0,0,0,20" Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="300"/>
+                                </Grid.RowDefinitions>
+                                
+                                <TextBlock Text="销售趋势分析" FontSize="16" FontWeight="Bold" Foreground="#333333" 
+                                           Margin="15,10,0,10"/>
+                                
+                                <lvc:CartesianChart Grid.Row="1" Margin="10" Series="{Binding SalesChartSeries}" Height="280"
+                                                    LegendLocation="Bottom">
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Title="日期" FontSize="12"/>
+                                    </lvc:CartesianChart.AxisX>
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis Title="金额" FontSize="12"/>
+                                    </lvc:CartesianChart.AxisY>
+                                </lvc:CartesianChart>
+                            </Grid>
+                        </Border>
                         
                         <!-- 销售日报数据网格 -->
                         <DataGrid x:Name="dgSalesDaily" AutoGenerateColumns="False" CanUserAddRows="False" 
