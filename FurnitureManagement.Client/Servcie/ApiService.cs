@@ -1114,5 +1114,171 @@ namespace FurnitureManagement.Client.Servcie
         }
 
         #endregion
+
+        #region Report 报表相关接口
+
+        /// <summary>
+        /// 获取库存管理报表
+        /// </summary>
+        /// <returns>库存汇总数据</returns>
+        public async Task<List<InventorySummary>?> GetInventorySummaryAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Report/inventory-summary");
+                return await response.Content.ReadFromJsonAsync<List<InventorySummary>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取库存管理报表失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取销售日报
+        /// </summary>
+        /// <returns>销售日报数据</returns>
+        public async Task<List<SalesDaily>?> GetSalesDailyAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Report/sales-daily");
+                return await response.Content.ReadFromJsonAsync<List<SalesDaily>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取销售日报失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取人员操作报表
+        /// </summary>
+        /// <returns>人员操作数据</returns>
+        public async Task<List<UserOperations>?> GetUserOperationsAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Report/user-operations");
+                return await response.Content.ReadFromJsonAsync<List<UserOperations>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取人员操作报表失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region CapitalFlow 资金流相关接口
+
+        // 获取所有资金流水
+        public async Task<List<CapitalFlow>?> GetCapitalFlowsAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("CapitalFlow");
+                return await response.Content.ReadFromJsonAsync<List<CapitalFlow>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取资金流水列表失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 根据ID获取资金流水
+        public async Task<CapitalFlow?> GetCapitalFlowByIdAsync(int id)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"CapitalFlow/{id}");
+                return await response.Content.ReadFromJsonAsync<CapitalFlow>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取资金流水失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 创建资金流水
+        public async Task<CapitalFlow?> CreateCapitalFlowAsync(CapitalFlow capitalFlow)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("CapitalFlow", capitalFlow);
+                return await response.Content.ReadFromJsonAsync<CapitalFlow>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"创建资金流水失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        // 更新资金流水
+        public async Task<ApiResponse?> UpdateCapitalFlowAsync(int id, CapitalFlow capitalFlow)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync($"CapitalFlow/{id}", capitalFlow);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "更新成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"更新失败: {response.StatusCode}" };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"更新资金流水失败: {ex.Message}");
+                return new ApiResponse { Success = false, Message = "网络请求失败" };
+            }
+        }
+
+        // 删除资金流水
+        public async Task<ApiResponse?> DeleteCapitalFlowAsync(int id)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"CapitalFlow/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse { Success = true, Message = "删除成功" };
+                }
+                else
+                {
+                    return new ApiResponse { Success = false, Message = $"删除失败: {response.StatusCode}" };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"删除资金流水失败: {ex.Message}");
+                return new ApiResponse { Success = false, Message = "网络请求失败" };
+            }
+        }
+
+        // 获取资金流水汇总
+        public async Task<CapitalFlowSummary?> GetCapitalFlowSummaryAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("CapitalFlow/Summary");
+                return await response.Content.ReadFromJsonAsync<CapitalFlowSummary>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取资金流水汇总失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        #endregion
     }
 }
