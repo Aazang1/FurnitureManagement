@@ -7,14 +7,14 @@
         mc:Ignorable="d"
         Title="商品编辑"
         Width="550"
-        Height="680"
+        Height="880"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResizeWithGrip">
     <Grid Background="#F5F5F5">
         <StackPanel Margin="20">
             <!-- 标题 -->
             <TextBlock x:Name="txtTitle" Text="添加商品" FontSize="20" FontWeight="Bold" Margin="0,0,0,20" Foreground="#333333"/>
-            
+
             <!-- 表单区域 -->
             <Border Background="White" Padding="20" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8">
                 <StackPanel>
@@ -38,7 +38,7 @@
                             </TextBox.Style>
                         </TextBox>
                     </StackPanel>
-                    
+
                     <!-- 分类选择 -->
                     <StackPanel Margin="0,0,0,15">
                         <TextBlock Text="分类 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
@@ -59,7 +59,7 @@
                             </ComboBox.Style>
                         </ComboBox>
                     </StackPanel>
-                    
+
                     <!-- 型号 -->
                     <StackPanel Margin="0,0,0,15">
                         <TextBlock Text="型号" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
@@ -80,7 +80,7 @@
                             </TextBox.Style>
                         </TextBox>
                     </StackPanel>
-                    
+
                     <!-- 进货价格 -->
                     <StackPanel Margin="0,0,0,15">
                         <TextBlock Text="进货价格 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
@@ -101,7 +101,7 @@
                             </TextBox.Style>
                         </TextBox>
                     </StackPanel>
-                    
+
                     <!-- 销售价格 -->
                     <StackPanel Margin="0,0,0,15">
                         <TextBlock Text="销售价格 *" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
@@ -122,7 +122,7 @@
                             </TextBox.Style>
                         </TextBox>
                     </StackPanel>
-                    
+
                     <!-- 描述 -->
                     <StackPanel Margin="0,0,0,20">
                         <TextBlock Text="描述" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
@@ -143,10 +143,96 @@
                             </TextBox.Style>
                         </TextBox>
                     </StackPanel>
-                    
+
+                    <!-- 图片上传 -->
+                    <StackPanel Margin="0,0,0,20">
+                        <TextBlock Text="商品图片" FontSize="14" FontWeight="Medium" Margin="0,0,0,5" Foreground="#333333"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- 图片预览 -->
+                            <Border x:Name="imgPreviewBorder" Width="100" Height="100" Margin="0,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                                   BorderBrush="#E0E0E0" BorderThickness="1" Background="#F5F5F5" Drop="Image_Drop" DragEnter="Image_DragEnter" DragOver="Image_DragOver" AllowDrop="True">
+                                <Grid>
+                                    <Image x:Name="imgPreview" Width="100" Height="100" 
+                                           Stretch="Uniform" Cursor="Hand" ToolTip="点击或拖拽图片到此区域上传">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Setter Property="Opacity" Value="1"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Opacity" Value="0.8"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <TextBlock x:Name="txtImageHint" Text="点击或拖拽图片" 
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                               Foreground="#999999" FontSize="12" TextWrapping="Wrap" 
+                                               TextAlignment="Center" Width="80" Visibility="Visible"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- 图片上传控件 -->
+                            <StackPanel Grid.Column="1">
+                                <!-- 上传按钮 -->
+                                <Button x:Name="btnUploadImage" Content="上传图片" Width="100" Height="35" Background="#3498DB" Foreground="White" 
+                                        BorderBrush="Transparent" Margin="0,0,0,10" Click="btnUploadImage_Click">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#2980B9"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+
+                                <!-- 清空图片按钮 -->
+                                <Button x:Name="btnClearImage" Content="清空图片" Width="100" Height="30" Background="#E0E0E0" Foreground="#333333" 
+                                        BorderBrush="Transparent" Margin="0,0,0,10" Click="btnClearImage_Click">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#BDBDBD"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+
+                                <!-- 图片路径显示 -->
+                                <StackPanel>
+                                    <TextBlock Text="图片路径:" FontSize="12" Foreground="#666666" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="txtImagePath" Width="Auto" Height="30" Padding="5" IsReadOnly="True" Background="#F5F5F5" 
+                                             FontSize="12" VerticalContentAlignment="Center">
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox">
+                                                <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                                <Setter Property="BorderThickness" Value="1"/>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
+                                </StackPanel>
+                                
+                                <!-- 隐藏的图片URL存储 -->
+                                <TextBox x:Name="txtImageUrl" Visibility="Collapsed"/>
+
+                                <!-- 图片格式提示 -->
+                                <TextBlock Text="支持格式: JPG, PNG, BMP, GIF" FontSize="11" Foreground="#999999" Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
                     <!-- 错误信息 -->
                     <TextBlock x:Name="txtError" FontSize="12" Foreground="#E74C3C" Margin="0,0,0,15" Visibility="Collapsed"/>
-                    
+
                     <!-- 按钮区域 -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Content="取消" Width="80" Height="35" Margin="0,0,10,0" Background="#E0E0E0" Foreground="#333333" 

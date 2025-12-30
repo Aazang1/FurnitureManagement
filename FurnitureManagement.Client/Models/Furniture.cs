@@ -61,8 +61,13 @@ namespace FurnitureManagement.Client.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         
         /// <summary>
-        /// 所属分类（导航属性，仅客户端使用）
-        /// </summary>
-        public Category? Category { get; set; }
-    }
+    /// 所属分类（导航属性，仅客户端使用）
+    /// </summary>
+    public Category? Category { get; set; }
+    
+    /// <summary>
+    /// 商品图片URL
+    /// </summary>
+    public string? ImageUrl { get; set; }
+}
 }

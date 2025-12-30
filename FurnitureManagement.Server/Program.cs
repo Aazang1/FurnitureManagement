@@ -12,6 +12,17 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<FurnitureManagement.Server.Data.AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+// 配置CORS策略
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 // 修改这行：在 AddControllers() 后面添加 JSON 配置
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -36,6 +47,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// 启用静态文件服务
+app.UseStaticFiles();
 
 // 启用CORS
 app.UseCors("AllowAll");

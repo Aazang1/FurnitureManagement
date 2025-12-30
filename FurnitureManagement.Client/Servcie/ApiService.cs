@@ -1,5 +1,6 @@
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.IO;
 using FurnitureManagement.Client.Models;
 
 namespace FurnitureManagement.Client.Servcie
@@ -1191,6 +1192,40 @@ namespace FurnitureManagement.Client.Servcie
 
         #endregion
 
+        // 图片上传方法
+        public async Task<ImageUploadResponse?> UploadImageAsync(string filePath)
+        {
+            try
+            {
+                // 创建MultipartFormDataContent
+                var formContent = new MultipartFormDataContent();
+                
+                // 添加图片文件
+                var fileStream = File.OpenRead(filePath);
+                var fileName = Path.GetFileName(filePath);
+                formContent.Add(new StreamContent(fileStream), "image", fileName);
+                
+                // 发送POST请求
+                var response = await _httpClient.PostAsync("Image/upload", formContent);
+                
+                // 确保请求成功
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<ImageUploadResponse>();
+                }
+                else
+                {
+                    Console.WriteLine($"图片上传失败: {response.StatusCode}");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"图片上传异常: {ex.Message}");
+                return null;
+            }
+        }
+        
         #region CapitalFlow 资金流相关接口
 
         // 获取所有资金流水

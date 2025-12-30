@@ -35,4 +35,11 @@ namespace FurnitureManagement.Client.Models
         public string OldPassword { get; set; } = string.Empty;
         public string NewPassword { get; set; } = string.Empty;
     }
+    
+    public class ImageUploadResponse
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
+    }
 }

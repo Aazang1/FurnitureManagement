@@ -38,6 +38,9 @@ namespace FurnitureManagement.Server.Models
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        
+        [Column("image_url")]
+        public string? ImageUrl { get; set; }
 
         // Navigation property
         public Category? Category { get; set; }
