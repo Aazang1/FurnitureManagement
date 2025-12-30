@@ -1136,6 +1136,24 @@ namespace FurnitureManagement.Client.Servcie
         }
 
         /// <summary>
+        /// 获取按仓库分类的库存管理报表
+        /// </summary>
+        /// <returns>按仓库分类的库存数据</returns>
+        public async Task<List<InventorySummary>?> GetInventoryByWarehouseAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Report/inventory-by-warehouse");
+                return await response.Content.ReadFromJsonAsync<List<InventorySummary>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取按仓库分类的库存数据失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
         /// 获取销售日报
         /// </summary>
         /// <returns>销售日报数据</returns>

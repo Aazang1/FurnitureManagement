@@ -34,21 +34,26 @@
                             </Button>
                         </StackPanel>
                         
-                        <!-- 图表区域 -->
-                        <Border Margin="0,0,0,20" Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8">
+                        <!-- 库存管理报表图表区域 -->
+                        <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="300"/>
                                 </Grid.RowDefinitions>
                                 
-                                <TextBlock Text="库存数量分布" FontSize="16" FontWeight="Bold" Foreground="#333333" 
+                                <TextBlock Text="库存数量分析" FontSize="16" FontWeight="Bold" Foreground="#333333" 
                                            Margin="15,10,0,10"/>
                                 
-                                <lvc:CartesianChart Grid.Row="1" Margin="10" Series="{Binding InventoryChartSeries}" Height="280"
-                                                    LegendLocation="Bottom">
+                                <lvc:CartesianChart Grid.Row="1" Margin="10" Series="{Binding InventoryChartSeries}" 
+                                                    Height="280" LegendLocation="Bottom"
+                                                    DataTooltip="{x:Null}">
                                     <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis Title="商品名称" FontSize="12"/>
+                                        <lvc:Axis Title="商品名称" FontSize="12" Labels="{Binding InventoryFurnitureNames}">
+                                            <lvc:Axis.Separator>
+                                                <lvc:Separator IsEnabled="True" Step="1"/>
+                                            </lvc:Axis.Separator>
+                                        </lvc:Axis>
                                     </lvc:CartesianChart.AxisX>
                                     <lvc:CartesianChart.AxisY>
                                         <lvc:Axis Title="库存数量" FontSize="12"/>
@@ -56,57 +61,6 @@
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
-                        
-                        <!-- 库存管理报表数据网格 -->
-                        <DataGrid x:Name="dgInventorySummary" AutoGenerateColumns="False" CanUserAddRows="False" 
-                                  SelectionMode="Single" SelectionUnit="FullRow" Background="White"
-                                  BorderBrush="#E0E0E0" BorderThickness="1" RowHeight="40">
-                            <!-- 列样式 -->
-                            <DataGrid.ColumnHeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#F5F5F5"/>
-                                    <Setter Property="Foreground" Value="#333333"/>
-                                    <Setter Property="FontWeight" Value="Bold"/>
-                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
-                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                                    <Setter Property="Padding" Value="10"/>
-                                </Style>
-                            </DataGrid.ColumnHeaderStyle>
-                            
-                            <!-- 行样式 -->
-                            <DataGrid.RowStyle>
-                                <Style TargetType="DataGridRow">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="#E6F2FF"/>
-                                            <Setter Property="Foreground" Value="#3498DB"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.RowStyle>
-                            
-                            <!-- 单元格样式 -->
-                            <DataGrid.CellStyle>
-                                <Style TargetType="DataGridCell">
-                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
-                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                                    <Setter Property="Padding" Value="10"/>
-                                </Style>
-                            </DataGrid.CellStyle>
-                            
-                            <!-- 列定义 -->
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="商品ID" Binding="{Binding FurnitureId}" Width="80" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="商品名称" Binding="{Binding FurnitureName}" Width="150" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="分类" Binding="{Binding CategoryName}" Width="120" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="仓库" Binding="{Binding WarehouseName}" Width="120" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="库存数量" Binding="{Binding Quantity}" Width="100" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="进货单价" Binding="{Binding PurchasePrice, StringFormat='C2'}" Width="100" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="销售单价" Binding="{Binding SalePrice, StringFormat='C2'}" Width="100" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="库存成本" Binding="{Binding InventoryCost, StringFormat='C2'}" Width="120" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="库存价值" Binding="{Binding InventoryValue, StringFormat='C2'}" Width="120" IsReadOnly="True"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
                     </StackPanel>
                 </TabItem>
                 
@@ -129,8 +83,8 @@
                             </Button>
                         </StackPanel>
                         
-                        <!-- 图表区域 -->
-                        <Border Margin="0,0,0,20" Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8">
+                        <!-- 销售趋势分析图表区域 -->
+                        <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -140,63 +94,22 @@
                                 <TextBlock Text="销售趋势分析" FontSize="16" FontWeight="Bold" Foreground="#333333" 
                                            Margin="15,10,0,10"/>
                                 
-                                <lvc:CartesianChart Grid.Row="1" Margin="10" Series="{Binding SalesChartSeries}" Height="280"
-                                                    LegendLocation="Bottom">
+                                <lvc:CartesianChart Grid.Row="1" Margin="10" Series="{Binding SalesChartSeries}" 
+                                                    Height="280" LegendLocation="Bottom"
+                                                    DataTooltip="{x:Null}">
                                     <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis Title="日期" FontSize="12"/>
+                                        <lvc:Axis Title="销售日期" FontSize="12" Labels="{Binding SalesDates}">
+                                            <lvc:Axis.Separator>
+                                                <lvc:Separator IsEnabled="True" Step="1"/>
+                                            </lvc:Axis.Separator>
+                                        </lvc:Axis>
                                     </lvc:CartesianChart.AxisX>
                                     <lvc:CartesianChart.AxisY>
-                                        <lvc:Axis Title="金额" FontSize="12"/>
+                                        <lvc:Axis Title="销售金额" FontSize="12"/>
                                     </lvc:CartesianChart.AxisY>
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
-                        
-                        <!-- 销售日报数据网格 -->
-                        <DataGrid x:Name="dgSalesDaily" AutoGenerateColumns="False" CanUserAddRows="False" 
-                                  SelectionMode="Single" SelectionUnit="FullRow" Background="White"
-                                  BorderBrush="#E0E0E0" BorderThickness="1" RowHeight="40">
-                            <!-- 列样式 -->
-                            <DataGrid.ColumnHeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#F5F5F5"/>
-                                    <Setter Property="Foreground" Value="#333333"/>
-                                    <Setter Property="FontWeight" Value="Bold"/>
-                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
-                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                                    <Setter Property="Padding" Value="10"/>
-                                </Style>
-                            </DataGrid.ColumnHeaderStyle>
-                            
-                            <!-- 行样式 -->
-                            <DataGrid.RowStyle>
-                                <Style TargetType="DataGridRow">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="#E6F2FF"/>
-                                            <Setter Property="Foreground" Value="#3498DB"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.RowStyle>
-                            
-                            <!-- 单元格样式 -->
-                            <DataGrid.CellStyle>
-                                <Style TargetType="DataGridCell">
-                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
-                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                                    <Setter Property="Padding" Value="10"/>
-                                </Style>
-                            </DataGrid.CellStyle>
-                            
-                            <!-- 列定义 -->
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="销售日期" Binding="{Binding SaleDay, StringFormat='yyyy-MM-dd'}" Width="120" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="订单数量" Binding="{Binding OrderCount}" Width="100" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="销售总额" Binding="{Binding TotalSales, StringFormat='C2'}" Width="120" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="总折扣" Binding="{Binding TotalDiscount, StringFormat='C2'}" Width="120" IsReadOnly="True"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
                     </StackPanel>
                 </TabItem>
                 

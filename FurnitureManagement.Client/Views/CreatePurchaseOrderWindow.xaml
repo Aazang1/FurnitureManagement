@@ -98,7 +98,7 @@
                                     <DataGridTemplateColumn Header="商品" Width="150">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox ItemsSource="{Binding FurnitureList}" SelectedItem="{Binding Furniture}" DisplayMemberPath="FurnitureName" SelectedValuePath="FurnitureId" Width="140" VerticalContentAlignment="Center"/>
+                                                <ComboBox ItemsSource="{Binding FurnitureList}" SelectedItem="{Binding Furniture}" DisplayMemberPath="FurnitureName" SelectedValuePath="FurnitureId" Width="140" VerticalContentAlignment="Center" SelectionChanged="cmbFurniture_SelectionChanged" Tag="{Binding}"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -110,7 +110,7 @@
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="数量" Width="80" Binding="{Binding Quantity}" IsReadOnly="False"/>
-                                    <DataGridTextColumn Header="单价" Width="80" Binding="{Binding UnitPrice}" IsReadOnly="False"/>
+                                    <DataGridTextColumn Header="单价" Width="80" Binding="{Binding UnitPrice}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="金额" Width="100" Binding="{Binding Amount, StringFormat=C}" IsReadOnly="True"/>
                                     <DataGridTemplateColumn Header="操作" Width="80">
                                         <DataGridTemplateColumn.CellTemplate>

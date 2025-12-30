@@ -318,7 +318,22 @@ INSERT INTO `warehouse` VALUES (2, '临时仓库', '商场2楼', 2000, '李助�
 -- View structure for v_inventory_summary
 -- ----------------------------
 DROP VIEW IF EXISTS `v_inventory_summary`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `v_inventory_summary` AS select `f`.`furniture_id` AS `furniture_id`,`f`.`furniture_name` AS `furniture_name`,`c`.`category_name` AS `category_name`,`w`.`warehouse_name` AS `warehouse_name`,`i`.`quantity` AS `quantity`,`f`.`purchase_price` AS `purchase_price`,`f`.`sale_price` AS `sale_price`,(`i`.`quantity` * `f`.`purchase_price`) AS `inventory_cost`,(`i`.`quantity` * `f`.`sale_price`) AS `inventory_value` from (((`inventory` `i` join `furniture` `f` on((`i`.`furniture_id` = `f`.`furniture_id`))) join `category` `c` on((`f`.`category_id` = `c`.`category_id`))) join `warehouse` `w` on((`i`.`warehouse_id` = `w`.`warehouse_id`)));
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `v_inventory_summary` AS 
+SELECT 
+    `f`.`furniture_id` AS `furniture_id`,
+    `f`.`furniture_name` AS `furniture_name`,
+    `c`.`category_name` AS `category_name`,
+    '全部仓库' AS `warehouse_name`,
+    SUM(`i`.`quantity`) AS `quantity`,
+    `f`.`purchase_price` AS `purchase_price`,
+    `f`.`sale_price` AS `sale_price`,
+    SUM(`i`.`quantity` * `f`.`purchase_price`) AS `inventory_cost`,
+    SUM(`i`.`quantity` * `f`.`sale_price`) AS `inventory_value`
+FROM (((`inventory` `i` 
+    JOIN `furniture` `f` ON((`i`.`furniture_id` = `f`.`furniture_id`))) 
+    JOIN `category` `c` ON((`f`.`category_id` = `c`.`category_id`))) 
+    JOIN `warehouse` `w` ON((`i`.`warehouse_id` = `w`.`warehouse_id`)))
+GROUP BY `f`.`furniture_id`, `f`.`furniture_name`, `c`.`category_name`, `f`.`purchase_price`, `f`.`sale_price`;
 
 -- ----------------------------
 -- View structure for v_sales_daily
@@ -333,3 +348,4 @@ DROP VIEW IF EXISTS `v_user_operations`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `v_user_operations` AS select `u`.`user_id` AS `user_id`,`u`.`username` AS `username`,`u`.`real_name` AS `real_name`,`u`.`role` AS `role`,count(distinct `po`.`purchase_id`) AS `purchase_orders`,count(distinct `so`.`sale_id`) AS `sale_orders`,`u`.`last_login` AS `last_login` from ((`user` `u` left join `purchase_order` `po` on((`u`.`user_id` = `po`.`created_by`))) left join `sale_order` `so` on((`u`.`user_id` = `so`.`created_by`))) group by `u`.`user_id`,`u`.`username`,`u`.`real_name`,`u`.`role`,`u`.`last_login`;
 
 SET FOREIGN_KEY_CHECKS = 1;
+

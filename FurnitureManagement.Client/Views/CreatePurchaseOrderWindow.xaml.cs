@@ -71,6 +71,19 @@ namespace FurnitureManagement.Client.Views
         // 添加采购明细
         private void btnAddDetail_Click(object sender, RoutedEventArgs e)
         {
+            // 检查数据是否加载完成
+            if (_furnitureList == null || _furnitureList.Count == 0)
+            {
+                MessageBox.Show("商品数据加载中，请稍后再试", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (_warehouseList == null || _warehouseList.Count == 0)
+            {
+                MessageBox.Show("仓库数据加载中，请稍后再试", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
             var detailViewModel = new PurchaseDetailViewModel()
             {
                 FurnitureList = _furnitureList,
@@ -140,29 +153,28 @@ namespace FurnitureManagement.Client.Views
             }
 
             // 验证每条明细的必填项
-            foreach (var detail in _detailViewModels)
+            for (int i = 0; i < _detailViewModels.Count; i++)
             {
+                var detail = _detailViewModels[i];
+                
+                // 调试信息：输出明细状态
+                Console.WriteLine($"第{i + 1}条明细状态 - 商品: {detail.Furniture?.FurnitureName ?? "null"}, 仓库: {detail.Warehouse?.WarehouseName ?? "null"}, 数量: {detail.Quantity}");
+                
                 if (detail.Furniture == null)
                 {
-                    MessageBox.Show("请为每条明细选择商品", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"第{i + 1}条明细：请选择商品", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 if (detail.Warehouse == null)
                 {
-                    MessageBox.Show("请为每条明细选择仓库", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"第{i + 1}条明细：请选择仓库", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 if (detail.Quantity <= 0)
                 {
-                    MessageBox.Show("请输入有效的采购数量", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                if (detail.UnitPrice <= 0)
-                {
-                    MessageBox.Show("请输入有效的采购单价", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"第{i + 1}条明细：请输入有效的采购数量", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
             }
@@ -207,6 +219,33 @@ namespace FurnitureManagement.Client.Views
             this.DialogResult = false;
             this.Close();
         }
+
+        // 商品选择变更事件处理
+        private void cmbFurniture_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+            if (comboBox != null && comboBox.SelectedItem != null)
+            {
+                var currentRow = comboBox.DataContext as PurchaseDetailViewModel;
+                if (currentRow != null)
+                {
+                    var selectedFurniture = comboBox.SelectedItem as Furniture;
+                    if (selectedFurniture != null)
+                    {
+                        // 设置单价为进货价格
+                        currentRow.UnitPrice = selectedFurniture.PurchasePrice;
+                        
+                        // 更新金额属性以触发UI更新
+                        currentRow.OnPropertyChanged(nameof(currentRow.Amount));
+                        
+                        // 更新总金额
+                        UpdateTotalAmount();
+                        
+                        Console.WriteLine($"选择商品: {selectedFurniture.FurnitureName}, 设置单价: {selectedFurniture.PurchasePrice}");
+                    }
+                }
+            }
+        }
     }
 
     // 采购明细视图模型
@@ -227,6 +266,17 @@ namespace FurnitureManagement.Client.Views
             {
                 _furniture = value;
                 OnPropertyChanged(nameof(Furniture));
+                
+                // 当选择商品时，自动设置单价为该商品的进货价格
+                if (value != null)
+                {
+                    UnitPrice = value.PurchasePrice;
+                }
+                else
+                {
+                    UnitPrice = 0;
+                }
+                
                 OnPropertyChanged(nameof(Amount));
             }
         }
@@ -267,7 +317,7 @@ namespace FurnitureManagement.Client.Views
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void OnPropertyChanged(string propertyName)
+        public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

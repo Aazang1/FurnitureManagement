@@ -198,13 +198,13 @@
                     <!-- 列定义 -->
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="订单ID" Binding="{Binding SaleId}" Width="80" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="客户姓名" Binding="{Binding CustomerName}" Width="120" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="客户电话" Binding="{Binding CustomerPhone}" Width="150" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="销售日期" Binding="{Binding SaleDate, StringFormat='yyyy-MM-dd'}" Width="120" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="总金额" Binding="{Binding TotalAmount, StringFormat='¥{0:N2}'}" Width="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="客户姓名" Binding="{Binding CustomerName}" Width="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="客户电话" Binding="{Binding CustomerPhone}" Width="120" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="销售日期" Binding="{Binding SaleDate, StringFormat='yyyy-MM-dd'}" Width="110" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="总金额" Binding="{Binding TotalAmount, StringFormat='¥{0:N2}'}" Width="90" IsReadOnly="True"/>
                         <DataGridTextColumn Header="折扣" Binding="{Binding Discount, StringFormat='¥{0:N2}'}" Width="80" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="最终金额" Binding="{Binding FinalAmount, StringFormat='¥{0:N2}'}" Width="120" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="状态" Binding="{Binding Status, Converter={StaticResource SaleStatusConverter}}" Width="100" IsReadOnly="True">
+                        <DataGridTextColumn Header="最终金额" Binding="{Binding FinalAmount, StringFormat='¥{0:N2}'}" Width="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="状态" Binding="{Binding Status, Converter={StaticResource SaleStatusConverter}}" Width="80" IsReadOnly="True">
                             <DataGridTextColumn.CellStyle>
                                 <Style TargetType="DataGridCell">
                                     <Style.Triggers>

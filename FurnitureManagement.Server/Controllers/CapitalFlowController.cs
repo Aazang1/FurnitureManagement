@@ -105,7 +105,7 @@ namespace FurnitureManagement.Server.Controllers
 
             var totalExpense = await _context.CapitalFlow
                 .Where(cf => cf.FlowType == "expense")
-                .SumAsync(cf => cf.Amount);
+                .SumAsync(cf => Math.Abs(cf.Amount)); // 取绝对值处理支出
 
             var balance = totalIncome - totalExpense;
 

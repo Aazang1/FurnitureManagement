@@ -448,7 +448,7 @@
                             </DataGridTextColumn>
                             <DataGridTextColumn Header="创建时间" Binding="{Binding CreatedAt, StringFormat=yyyy-MM-dd HH:mm}" Width="150" IsReadOnly="True"/>
                             <DataGridTextColumn Header="最后登录" Binding="{Binding LastLogin, StringFormat=yyyy-MM-dd HH:mm}" Width="150" IsReadOnly="True"/>
-                            <DataGridTemplateColumn Header="操作" Width="180" IsReadOnly="True">
+                            <DataGridTemplateColumn Header="操作" Width="120" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
@@ -474,29 +474,6 @@
                                                         <Style.Triggers>
                                                             <Trigger Property="IsMouseOver" Value="True">
                                                                 <Setter Property="Background" Value="#C0392B"/>
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
-                                            
-                                            <!-- 状态切换按钮 -->
-                                            <Button x:Name="btnToggleStatus" Content="" FontSize="12" Padding="8,5" Margin="0,0,0,0"
-                                                    Background="#95A5A6" Foreground="White"
-                                                    BorderBrush="Transparent" BorderThickness="0" Click="btnToggleStatus_Click" Tag="{Binding}">
-                                                <Button.Style>
-                                                    <Style TargetType="Button">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Status}" Value="active">
-                                                                <Setter Property="Content" Value="禁用"/>
-                                                                <Setter Property="Background" Value="#95A5A6"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Status}" Value="inactive">
-                                                                <Setter Property="Content" Value="启用"/>
-                                                                <Setter Property="Background" Value="#27AE60"/>
-                                                            </DataTrigger>
-                                                            <Trigger Property="IsMouseOver" Value="True">
-                                                                <Setter Property="Opacity" Value="0.9"/>
                                                             </Trigger>
                                                         </Style.Triggers>
                                                     </Style>

@@ -37,90 +37,6 @@
             </Style.Triggers>
         </Style>
         
-        <!-- 按钮样式 -->
-        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="38"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="#3498DB"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="15,8"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Direction="270"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
-                                CornerRadius="8">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center" 
-                                              TextElement.Foreground="{TemplateBinding Foreground}" 
-                                              TextElement.FontWeight="{TemplateBinding FontWeight}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#2980B9"/>
-                    <Setter Property="Effect">
-                        <Setter.Value>
-                            <DropShadowEffect BlurRadius="10" ShadowDepth="3" Opacity="0.15" Direction="270"/>
-                        </Setter.Value>
-                    </Setter>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#2471A3"/>
-                    <Setter Property="Effect">
-                        <Setter.Value>
-                            <DropShadowEffect BlurRadius="5" ShadowDepth="1" Opacity="0.1" Direction="270"/>
-                        </Setter.Value>
-                    </Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        
-        <!-- 删除按钮样式 -->
-        <Style x:Key="DeleteButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="Width" Value="55"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="#E74C3C"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
-                                CornerRadius="6">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center" 
-                                              TextElement.Foreground="{TemplateBinding Foreground}" 
-                                              TextElement.FontSize="{TemplateBinding FontSize}" 
-                                              TextElement.FontWeight="{TemplateBinding FontWeight}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#C0392B"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#A93226"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
     </Page.Resources>
     <Grid Background="#F5F5F5">
         <StackPanel Margin="20">
@@ -129,13 +45,13 @@
             
             <!-- 资金汇总卡片 -->
             <StackPanel Orientation="Horizontal" Margin="0,0,0,25">
-                <Border Style="{StaticResource CardStyle}">
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,20,0">
                     <StackPanel>
                         <TextBlock Text="总收入" FontSize="14" Foreground="#7F8C8D" Margin="0,0,0,5"/>
                         <TextBlock Text="{Binding CapitalSummary.TotalIncome, StringFormat='C2'}" FontSize="28" FontWeight="Bold" Foreground="#27AE60"/>
                     </StackPanel>
                 </Border>
-                <Border Style="{StaticResource CardStyle}">
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,20,0">
                     <StackPanel>
                         <TextBlock Text="总支出" FontSize="14" Foreground="#7F8C8D" Margin="0,0,0,5"/>
                         <TextBlock Text="{Binding CapitalSummary.TotalExpense, StringFormat='C2'}" FontSize="28" FontWeight="Bold" Foreground="#E74C3C"/>
@@ -147,11 +63,6 @@
                         <TextBlock Text="{Binding CapitalSummary.Balance, StringFormat='C2'}" FontSize="28" FontWeight="Bold" Foreground="#3498DB"/>
                     </StackPanel>
                 </Border>
-            </StackPanel>
-            
-            <!-- 操作按钮 -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,15">
-                <Button Content="刷新数据" Click="btnRefresh_Click" Style="{StaticResource PrimaryButtonStyle}"/>
             </StackPanel>
             
             <!-- 资金流水数据网格 -->
@@ -223,23 +134,13 @@
                     
                     <!-- 列定义 -->
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="流水ID" Binding="{Binding FlowId}" Width="80" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="流水日期" Binding="{Binding FlowDate, StringFormat='yyyy-MM-dd'}" Width="120" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="流向类型" Binding="{Binding FlowType, Converter={StaticResource FlowTypeConverter}}" Width="100" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="金额" Binding="{Binding Amount, StringFormat='C2'}" Width="120" IsReadOnly="True" FontWeight="Medium"/>
-                        <DataGridTextColumn Header="描述" Binding="{Binding Description}" Width="200" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="关联类型" Binding="{Binding ReferenceType}" Width="100" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="关联ID" Binding="{Binding ReferenceId}" Width="100" IsReadOnly="True"/>
-                        <DataGridTemplateColumn Header="操作" Width="80" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <Button Content="删除" Style="{StaticResource DeleteButtonStyle}" 
-                                                Click="btnDelete_Click" Tag="{Binding}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="流水ID" Binding="{Binding FlowId}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="流水日期" Binding="{Binding FlowDate, StringFormat='yyyy-MM-dd'}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="流向类型" Binding="{Binding FlowType, Converter={StaticResource FlowTypeConverter}}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="金额" Binding="{Binding Amount, StringFormat='C2'}" Width="*" IsReadOnly="True" FontWeight="Medium"/>
+                        <DataGridTextColumn Header="描述" Binding="{Binding Description}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="关联类型" Binding="{Binding ReferenceType}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="关联ID" Binding="{Binding ReferenceId}" Width="*" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>

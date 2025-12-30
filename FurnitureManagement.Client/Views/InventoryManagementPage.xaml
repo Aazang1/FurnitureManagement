@@ -17,12 +17,6 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="库存管理" FontSize="24" FontWeight="Bold" Foreground="#333333"/>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <ComboBox x:Name="cmbFilter" Width="150" Height="35" Margin="0,0,10,0" 
-                             VerticalContentAlignment="Center" Padding="10">
-                        <ComboBoxItem Content="所有库存" IsSelected="True"/>
-                        <ComboBoxItem Content="按商品筛选"/>
-                        <ComboBoxItem Content="按仓库筛选"/>
-                    </ComboBox>
                     <TextBox x:Name="txtSearch" Width="250" Height="35" Margin="0,0,10,0" 
                              VerticalContentAlignment="Center" Padding="10" Visibility="Collapsed">
                         <TextBox.Style>
@@ -106,10 +100,10 @@
                 
                 <!-- 列定义 -->
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="库存ID" Binding="{Binding InventoryId}" Width="80" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="商品名称" Binding="{Binding Furniture.FurnitureName}" Width="150" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="仓库" Binding="{Binding Warehouse.WarehouseName}" Width="120" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="数量" Binding="{Binding Quantity}" Width="100" IsReadOnly="True">
+                    <DataGridTextColumn Header="库存ID" Binding="{Binding InventoryId}" Width="90" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="商品名称" Binding="{Binding Furniture.FurnitureName}" Width="160" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="仓库" Binding="{Binding Warehouse.WarehouseName}" Width="160" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="数量" Binding="{Binding Quantity}" Width="110" IsReadOnly="True">
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Style.Triggers>
@@ -121,8 +115,8 @@
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="最后更新" Binding="{Binding LastUpdated, StringFormat='yyyy-MM-dd HH:mm'}" Width="150" IsReadOnly="True"/>
-                    <DataGridTemplateColumn Header="操作" Width="180" IsReadOnly="True">
+                    <DataGridTextColumn Header="最后更新" Binding="{Binding LastUpdated, StringFormat='yyyy-MM-dd HH:mm'}" Width="180" IsReadOnly="True"/>
+                    <DataGridTemplateColumn Header="操作" Width="220" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -171,6 +165,89 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
+            
+            <!-- 分页控件 -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                <!-- 每页显示条数选择 -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
+                    <TextBlock Text="每页显示:" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="#333333"/>
+                    <ComboBox x:Name="cmbPageSize" Width="80" Height="30" VerticalContentAlignment="Center" SelectedIndex="1">
+                        <ComboBoxItem Content="5条"/>
+                        <ComboBoxItem Content="10条"/>
+                        <ComboBoxItem Content="20条"/>
+                        <ComboBox.Style>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="BorderBrush" Value="#3498DB"/>
+                                    </Trigger>
+                                    <Trigger Property="IsFocused" Value="True">
+                                        <Setter Property="BorderBrush" Value="#3498DB"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
+                </StackPanel>
+                
+                <!-- 分页导航按钮 -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
+                    <Button x:Name="btnFirstPage" Content="首页" Width="50" Height="30" Background="#95A5A6" Foreground="White" 
+                            BorderBrush="Transparent" Click="btnFirstPage_Click" Margin="0,0,5,0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#7F8C8D"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button x:Name="btnPrevPage" Content="上一页" Width="60" Height="30" Background="#95A5A6" Foreground="White" 
+                            BorderBrush="Transparent" Click="btnPrevPage_Click" Margin="0,0,5,0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#7F8C8D"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <TextBlock x:Name="txtPageInfo" Text="第1页/共1页" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="#333333"/>
+                    <Button x:Name="btnNextPage" Content="下一页" Width="60" Height="30" Background="#95A5A6" Foreground="White" 
+                            BorderBrush="Transparent" Click="btnNextPage_Click" Margin="0,0,5,0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#7F8C8D"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button x:Name="btnLastPage" Content="末页" Width="50" Height="30" Background="#95A5A6" Foreground="White" 
+                            BorderBrush="Transparent" Click="btnLastPage_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#7F8C8D"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+                
+                <!-- 总记录数显示 -->
+                <TextBlock x:Name="txtTotalInfo" Text="共0条记录" VerticalAlignment="Center" Foreground="#333333"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

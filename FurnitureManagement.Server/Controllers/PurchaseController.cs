@@ -161,7 +161,7 @@ namespace FurnitureManagement.Server.Controllers
                 {
                     FlowDate = purchaseOrder.CreatedAt,
                     FlowType = "expense", // 采购是支出
-                    Amount = purchaseOrder.TotalAmount * -1, // 负数表示支出
+                    Amount = purchaseOrder.TotalAmount, // 使用正数表示支出金额，汇总时自动处理
                     Description = $"采购订单 #{purchaseOrder.PurchaseOrderId} 支出",
                     ReferenceType = "purchase",
                     ReferenceId = purchaseOrder.PurchaseOrderId,
