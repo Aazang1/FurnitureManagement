@@ -69,7 +69,7 @@ namespace FurnitureManagement.Server.Controllers
             {
                 Username = request.Username,
                 Password = PasswordHelper.EncryptPassword(request.Password),
-                RealName = request.Username, // 默认真实姓名为用户名
+                RealName = string.IsNullOrWhiteSpace(request.RealName) ? request.Username : request.RealName,
                 Email = request.Email,
                 Phone = request.Phone,
                 Role = request.Role,

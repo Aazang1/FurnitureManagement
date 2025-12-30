@@ -48,25 +48,27 @@ namespace FurnitureManagement.Client
             // 根据角色控制功能访问权限
             // Admin - 拥有所有权限
             // Manager - 拥有大部分管理权限，但不能管理用户
-            // User - 只能查看，不能管理
+            // User - 只能查看基本信息，不能进行管理操作
 
             if (UserSession.IsUser)
             {
-                // 普通用户：隐藏所有管理功能，只能查看
+                // 普通用户：隐藏所有管理功能，只能查看系统概览
                 btnInventoryManage.Visibility = Visibility.Collapsed;
                 btnPurchaseManage.Visibility = Visibility.Collapsed;
                 btnSalesManage.Visibility = Visibility.Collapsed;
                 btnFinanceManage.Visibility = Visibility.Collapsed;
                 btnReportManage.Visibility = Visibility.Collapsed;
                 btnProductManage.Visibility = Visibility.Collapsed;
+                btnCategoryManage.Visibility = Visibility.Collapsed;
                 btnSupplierManage.Visibility = Visibility.Collapsed;
                 btnWarehouseManage.Visibility = Visibility.Collapsed;
                 btnUserManage.Visibility = Visibility.Collapsed;
             }
             else if (UserSession.IsManager)
             {
-                // 经理：有管理权限，但不能管理用户
+                // 经理：有管理权限，但不能管理用户和财务
                 btnUserManage.Visibility = Visibility.Collapsed;
+                btnFinanceManage.Visibility = Visibility.Collapsed;
             }
             // Admin 拥有所有权限，不需要隐藏任何功能
         }

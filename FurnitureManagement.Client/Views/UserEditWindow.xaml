@@ -89,8 +89,9 @@
                         <StackPanel Margin="0,0,0,20">
                             <TextBlock Text="角色" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" Foreground="#333333"/>
                             <ComboBox x:Name="cmbRole" FontSize="14" Padding="12,10" Height="45" BorderBrush="#E0E0E0" BorderThickness="1">
-                                <ComboBoxItem Content="Admin" Tag="Admin"/>
-                                <ComboBoxItem Content="User" Tag="User"/>
+                                <ComboBoxItem Content="管理员 (Admin)" Tag="Admin"/>
+                                <ComboBoxItem Content="经理 (Manager)" Tag="Manager"/>
+                                <ComboBoxItem Content="普通用户 (User)" Tag="User"/>
                                 <ComboBox.Style>
                                     <Style TargetType="ComboBox">
                                         <Style.Triggers>
@@ -107,8 +108,8 @@
                         <StackPanel Margin="0,0,0,20">
                             <TextBlock Text="状态" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" Foreground="#333333"/>
                             <ComboBox x:Name="cmbStatus" FontSize="14" Padding="12,10" Height="45" BorderBrush="#E0E0E0" BorderThickness="1">
-                                <ComboBoxItem Content="active" Tag="active"/>
-                                <ComboBoxItem Content="inactive" Tag="inactive"/>
+                                <ComboBoxItem Content="启用 (active)" Tag="active"/>
+                                <ComboBoxItem Content="禁用 (inactive)" Tag="inactive"/>
                                 <ComboBox.Style>
                                     <Style TargetType="ComboBox">
                                         <Style.Triggers>

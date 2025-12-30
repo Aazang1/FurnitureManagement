@@ -24,28 +24,28 @@ namespace FurnitureManagement.Client.Services
         public static bool IsLoggedIn => _currentUser != null;
 
         /// <summary>
-        /// 检查当前用户是否为管理员
+        /// 检查当前用户是否为管理员（不区分大小写）
         /// </summary>
-        public static bool IsAdmin => _currentUser?.Role == "Admin";
+        public static bool IsAdmin => string.Equals(_currentUser?.Role, "Admin", StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
-        /// 检查当前用户是否为经理
+        /// 检查当前用户是否为经理（不区分大小写）
         /// </summary>
-        public static bool IsManager => _currentUser?.Role == "Manager";
+        public static bool IsManager => string.Equals(_currentUser?.Role, "Manager", StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
-        /// 检查当前用户是否为普通用户
+        /// 检查当前用户是否为普通用户（不区分大小写）
         /// </summary>
-        public static bool IsUser => _currentUser?.Role == "User";
+        public static bool IsUser => string.Equals(_currentUser?.Role, "User", StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
-        /// 检查当前用户是否有指定角色
+        /// 检查当前用户是否有指定角色（不区分大小写）
         /// </summary>
         /// <param name="role">角色名称</param>
         /// <returns>是否拥有该角色</returns>
         public static bool HasRole(string role)
         {
-            return _currentUser?.Role == role;
+            return string.Equals(_currentUser?.Role, role, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
